@@ -20,13 +20,25 @@ function BookForm({ onAddBook, onCancel }) {
   };
 
 
-  const handleAddBook = () => {
+  const handleAddBook = (e) => {
     if (!formData.title.trim()) {
       alert("도서 제목을 입력해주세요.");
+      e.preventDefault();
+      return;
+    } else if (!formData.author.trim()) {
+      alert("저자를 입력해주세요.");
+      e.preventDefault();
+      return;
+    } else if (!formData.publisher.trim()) {
+      alert("출판사를 입력해주세요.");
+      e.preventDefault();
+      return;
+    } else if (!formData.content.trim()) {
+      alert("도서 소개를 입력해주세요.");
+      e.preventDefault();
       return;
     }
 
-    console.log("안녕");
     console.log("title: ", formData.title);
     const newBook = {
       title: formData.title,
@@ -38,6 +50,8 @@ function BookForm({ onAddBook, onCancel }) {
       updated: new Date().toLocaleString()
     };
 
+    alert("등록 되었습니다.");
+
     onAddBook(newBook);
     setFormData({
       title: "",
@@ -45,6 +59,7 @@ function BookForm({ onAddBook, onCancel }) {
       publisher: "",
       content: "",
     });
+    onCancel();
   }
 
   return (
@@ -93,11 +108,7 @@ function BookForm({ onAddBook, onCancel }) {
       </div>
 
       <div className="form-buttons">
-        <button type="submit" onClick={() => {
-          handleAddBook;
-          alert("등록 되었습니다.");
-          onCancel;
-        }}>등록하기</button>
+        <button type="submit">등록하기</button>
         <button type="button" onClick={onCancel}>
           취소
         </button>
