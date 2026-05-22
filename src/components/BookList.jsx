@@ -1,3 +1,8 @@
+/**
+ * [교안 미션 3. 조회 기능 연동 (Read)]
+ * - db.json 서버로부터 가져온 전체 도서 목록을 리스트 카드 그리드(MUI Card) 형태로 화면에 렌더링합니다.
+ * - 사용자의 검색어에 맞춰 목록이 실시간으로 필터링되도록 배열의 filter 메소드를 적용했습니다.
+ */
 import React, { useState } from 'react';
 import { 
   Grid, Card, CardContent, CardMedia, Typography, Button, 
@@ -9,9 +14,26 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import ClearIcon from '@mui/icons-material/Clear';
 
+/**
+ * [React 핵심 개념: 컴포넌트와 Props]
+ * - BookList는 함수형 컴포넌트이며, 부모 컴포넌트(App.jsx)로부터 데이터를 받아와 화면을 구성합니다.
+ * - { books, onNavigate, onDelete }: Modern JS 문법인 '객체 구조 분해 할당(Destructuring Assignment)'을 사용하여
+ *   부모가 전달한 props 객체에서 필요한 속성들을 바로 변수로 추출하여 사용합니다.
+ */
 export const BookList = ({ books, onNavigate, onDelete }) => {
+  /**
+   * [React 핵심 개념: State(상태)]
+   * - useState Hook을 사용하여 검색창의 입력값(searchQuery)을 컴포넌트 로컬 상태로 관리합니다.
+   * - 사용자가 검색창에 글자를 입력할 때마다 setSearchQuery가 호출되어 searchQuery 값이 바뀌고, 
+   *   React는 이 컴포넌트를 자동으로 '리렌더링(re-render)'하여 화면을 새로 그립니다.
+   */
   const [searchQuery, setSearchQuery] = useState('');
 
+  // [교안 Chapter 2 & 미션 3 심화 - 검색/필터 UI 구현]
+  // - Modern JS 배열 메서드인 Array.prototype.filter()를 사용합니다.
+  // - filter는 원본 배열(books)을 변경하지 않고(React의 '불변성' 원칙 준수), 조건에 맞는 항목들만 모아 '새로운 배열'을 반환합니다.
+  // - includes() 메서드와 toLowerCase() 메서드를 연쇄적으로 호출(Method Chaining)하여 대소문자 구분 없이 
+  //   제목(title), 저자(author), 출판사(publisher), 본문내용(content)에 검색어가 들어있는 도서만 걸러냅니다.
   const filteredBooks = books.filter(book => 
     book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     book.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -19,6 +41,11 @@ export const BookList = ({ books, onNavigate, onDelete }) => {
     book.content.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  /**
+   * [JavaScript 실무 패턴: 날짜 포맷 변환 함수]
+   * - API 서버(json-server)에 저장된 ISO 8601 형식의 날짜 문자열(예: '2026-05-22T06:35:14Z')을
+   *   한국인 사용자에게 친숙한 'YYYY. MM. DD.' 형식으로 변환해주는 헬퍼 함수입니다.
+   */
   const formatDate = (dateStr) => {
     try {
       const date = new Date(dateStr);
@@ -28,18 +55,18 @@ export const BookList = ({ books, onNavigate, onDelete }) => {
         day: '2-digit'
       });
     } catch {
-      return dateStr;
+      return dateStr; // 변환 중 에러 발생 시 원본 문자열을 그대로 반환하는 예외 처리
     }
   };
 
   return (
     <Box sx={{ width: '100%' }}>
-      {/* Search and Filter Section */}
+      {/* 검색창(Search Input) 섹션 */}
       <Box sx={{ mb: 4, display: 'flex', justifyContent: 'center' }}>
         <TextField
           placeholder="도서 제목, 작가 또는 본문 내용 검색..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={searchQuery} // [양방향 바인딩/제어 컴포넌트]: input의 value를 React state에 연결
+          onChange={(e) => setSearchQuery(e.target.value)} // 사용자가 타이핑할 때마다 state 업데이트
           sx={{
             width: '100%',
             maxWidth: '600px',
@@ -61,6 +88,7 @@ export const BookList = ({ books, onNavigate, onDelete }) => {
             ),
             endAdornment: searchQuery && (
               <InputAdornment position="end">
+                {/* 검색어가 있을 때만 보여주는 '지우기(X)' 버튼 (단축 평가 / 논리곱 연산자 && 활용) */}
                 <IconButton onClick={() => setSearchQuery('')} size="small">
                   <ClearIcon />
                 </IconButton>
@@ -70,7 +98,8 @@ export const BookList = ({ books, onNavigate, onDelete }) => {
         />
       </Box>
 
-      {/* Grid List */}
+      {/* 도서 카드 리스트(Grid List) 섹션 */}
+      {/* 삼항 연산자(Ternary Operator)를 사용한 조건부 렌더링: 검색 결과가 없을 때와 있을 때의 UI를 다르게 보여줍니다. */}
       {filteredBooks.length === 0 ? (
         <Box 
           sx={{ 
@@ -91,6 +120,10 @@ export const BookList = ({ books, onNavigate, onDelete }) => {
         </Box>
       ) : (
         <Grid container spacing={3.5}>
+          {/* [React 핵심 개념: 리스트와 Key]
+              - Modern JS 배열 메서드인 Array.prototype.map()을 사용하여 필터링된 도서 배열을 React 컴포넌트(Grid) 배열로 변환합니다.
+              - React는 리스트 엘리먼트를 렌더링할 때 어떤 아이템이 추가, 수정, 삭제되었는지 빠르게 식별하기 위해 
+                반드시 고유한 'key' props를 요구합니다. 여기서는 도서의 고유 ID(book.id)를 사용합니다. */}
           {filteredBooks.map((book) => (
             <Grid item xs={12} sm={6} md={4} key={book.id}>
               <Card 
@@ -103,18 +136,24 @@ export const BookList = ({ books, onNavigate, onDelete }) => {
                   transition: 'transform 0.3s, box-shadow 0.3s',
                   position: 'relative',
                   '&:hover': {
-                    transform: 'translateY(-6px)',
+                    transform: 'translateY(-6px)', // 마우스 호버 시 위로 살짝 뜨는 마이크로 인터랙션 효과
                     boxShadow: '0 12px 30px rgba(149, 157, 165, 0.2)',
                   }
                 }}
               >
-                {/* Delete Button Overlay */}
+                {/* 도서 삭제 버튼 */}
                 <Tooltip title="도서 삭제" arrow>
                   <IconButton
                     size="small"
                     onClick={(e) => {
+                      /**
+                       * [React 핵심 개념: 이벤트 버블링(전파) 방지]
+                       * - e.stopPropagation()을 호출하지 않으면, 삭제 버튼 클릭 시 이벤트가 부모 엘리먼트로 전파(버블링)되어
+                       *   도서 카드 클릭 이벤트인 '상세보기로 이동'까지 동시에 실행되는 버그가 발생합니다.
+                       * - 이를 막기 위해 이벤트 전파를 중단시킵니다.
+                       */
                       e.stopPropagation();
-                      onDelete(book.id);
+                      onDelete(book.id); // 부모로부터 받은 삭제 처리 함수 실행
                     }}
                     sx={{
                       position: 'absolute',
@@ -135,7 +174,8 @@ export const BookList = ({ books, onNavigate, onDelete }) => {
                   </IconButton>
                 </Tooltip>
 
-                {/* Cover Image Area */}
+                {/* 도서 커버 이미지 영역 */}
+                {/* 조건부 렌더링: 커버 이미지가 있는 경우에는 CardMedia로 렌더링하고, 없는 경우에는 책 표지 템플릿(Box)을 렌더링합니다. */}
                 {book.coverImageUrl ? (
                   <CardMedia
                     component="img"
@@ -162,7 +202,7 @@ export const BookList = ({ books, onNavigate, onDelete }) => {
                       overflow: 'hidden'
                     }}
                   >
-                    {/* Decorative book pages background effect */}
+                    {/* 도서 표지가 없을 때 보여주는 세련된 가상 책 표지 레이아웃 (MUI Box 활용) */}
                     <Box 
                       sx={{ 
                         width: '75%', 
@@ -193,7 +233,7 @@ export const BookList = ({ books, onNavigate, onDelete }) => {
                   </Box>
                 )}
 
-                {/* Content Area */}
+                {/* 도서 정보 텍스트 영역 */}
                 <CardContent sx={{ flexGrow: 1, p: 3, display: 'flex', flexDirection: 'column' }}>
                   <Typography 
                     variant="h6" 
@@ -220,6 +260,7 @@ export const BookList = ({ books, onNavigate, onDelete }) => {
                     작가 {book.author} {book.publisher ? `| ${book.publisher}` : ''}
                   </Typography>
 
+                  {/* 3줄을 넘어가면 생략(...) 처리를 하는 CSS 스타일링 적용 (WebkitLineClamp) */}
                   <Typography 
                     variant="body2" 
                     sx={{ 
@@ -237,6 +278,7 @@ export const BookList = ({ books, onNavigate, onDelete }) => {
                     {book.content}
                   </Typography>
 
+                  {/* 카드 하단 날짜 및 상세보기 버튼 영역 */}
                   <Box 
                     sx={{ 
                       display: 'flex', 
@@ -273,3 +315,4 @@ export const BookList = ({ books, onNavigate, onDelete }) => {
     </Box>
   );
 };
+
