@@ -2,7 +2,7 @@ import Header from "../components/Header";
 import BookCard from "../components/BookCard";
 import { mockBooks } from "../data/mockBooks";
 
-function BookList({ books, MoveToDetail, onMoveToCreate }) {
+function BookList({ books, onMoveToDetail, onMoveToCreate }) {
   return (
     <div>
       <Header />
