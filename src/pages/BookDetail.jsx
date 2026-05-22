@@ -1,17 +1,22 @@
 import Header from "../components/Header";
 
-function BookDetail({ book, onMoveToList, onMoveToUpdate, onMoveToCoverUpdate }) {
-  
-  const handleDelete = () => {
-  const isConfirm = window.confirm("정말 이 도서를 삭제하시겠습니까?");
+function BookDetail({ book, onMoveToList, onMoveToUpdate, onMoveToCoverUpdate, onBookDelete }) {
 
-  if (!isConfirm) return;
+  const handleDelete = (id) => {
+    if (!window.confirm(`${book.title}을(를) 정말 삭제하시겠습니까?`)) {
+      return;
+    }
 
-  alert("도서 삭제 UI 확인용입니다. API 연결은 이후 진행합니다.");
-  console.log("삭제할 도서:", book);
-
-  onMoveToList();
-};
+    onBookDelete(id)          // 삭제 실행
+      .then(() => {
+        alert('도서가 성공적으로 삭제되었습니다.');
+        onMoveToList();            // 목록 페이지로 이동
+      })
+      .catch((error) => {
+        console.error(error);
+        alert('삭제에 실패했습니다.');
+      });
+  };
 
   if (!book) {
     return (
@@ -50,7 +55,7 @@ function BookDetail({ book, onMoveToList, onMoveToUpdate, onMoveToCoverUpdate })
             <div className="detail-buttons">
               <button onClick={() => onMoveToCoverUpdate(book)}>표지 시안 생성</button>
               <button onClick={() => onMoveToUpdate(book)}>수정하기</button>              
-              <button onClick={handleDelete}>삭제</button>
+              <button onClick={() => handleDelete(book.id)}>삭제</button>
               <button onClick={onMoveToList}>목록으로</button>
             </div>
           </div>

@@ -69,10 +69,11 @@ function App() {
   
   const handleBookDelete = async (id) => {
     try {
-      await fetch('http://localhost:3000/bookDelete/' + id, {
+      await fetch('http://localhost:3000/books/' + id, {
         method: 'DELETE',
       });
       setBooks(books.filter(b => b.id !== id));
+      
     } catch(eff) {
       console.error(err);
     }
@@ -81,7 +82,7 @@ function App() {
   const handleBookUpdate = async (updatedBook) => {
     try {
       const book = books.find(b => b.id === updatedBook.id);
-      const res = await fetch('http://localhost:3000/update/' + updatedBook.id, {
+      const res = await fetch('http://localhost:3000/books/' + updatedBook.id, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({ content: updatedBook.content/* 필요시 update할 컬럼을 더 작성 */})
@@ -116,6 +117,7 @@ function App() {
           onMoveToList={moveToList}
           onMoveToUpdate={moveToUpdate}
           onMoveToCoverUpdate={moveToCoverUpdate}
+          onBookDelete={handleBookDelete}
         />
       )}
 
