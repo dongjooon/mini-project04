@@ -6,8 +6,6 @@ function CoverUpdate({
   book,
   onMoveToStart,
   onMoveToDetail,
-  onMoveToList,
-  onMoveToCreate,
   onGenerateCover,
 }) {
   const [apiKey, setApiKey] = useState("");
@@ -20,8 +18,6 @@ function CoverUpdate({
       <>
         <Header
           onMoveToStart={onMoveToStart}
-          onMoveToList={onMoveToList}
-          onMoveToCreate={onMoveToCreate}
         />
 
         <main className="cover-page">
@@ -51,8 +47,6 @@ function CoverUpdate({
     <>
       <Header
         onMoveToStart={onMoveToStart}
-        onMoveToList={onMoveToList}
-        onMoveToCreate={onMoveToCreate}
       />
 
       <main className="cover-page">

@@ -15,10 +15,16 @@ function BookList({
       <Header
         onMoveToStart={onMoveToStart}
         onMoveToList={onMoveToList}
-        onMoveToCreate={onMoveToCreate}
       />
 
       <main className="book-list-page">
+        <section className="list-hero" aria-label="걷기가 서재 소개">
+          <div>
+            <strong>걷기가 서재</strong>
+            <p>글과 AI 표지 시안을 함께 관리하는 창작 서재</p>
+          </div>
+        </section>
+
         <section className="section-card">
           <div className="page-title-row">
             <h2>도서 목록</h2>

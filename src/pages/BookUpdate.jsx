@@ -6,8 +6,6 @@ function BookUpdate({
   book,
   onMoveToStart,
   onMoveToDetail,
-  onMoveToList,
-  onMoveToCreate,
   onUpdate,
 }) {
   const [formData, setFormData] = useState({
@@ -22,8 +20,6 @@ function BookUpdate({
       <>
         <Header
           onMoveToStart={onMoveToStart}
-          onMoveToList={onMoveToList}
-          onMoveToCreate={onMoveToCreate}
         />
 
         <main className="form-page">
@@ -57,8 +53,6 @@ function BookUpdate({
     <>
       <Header
         onMoveToStart={onMoveToStart}
-        onMoveToList={onMoveToList}
-        onMoveToCreate={onMoveToCreate}
       />
 
       <main className="form-page">

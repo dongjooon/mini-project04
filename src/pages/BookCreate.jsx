@@ -2,7 +2,7 @@ import { useState } from "react";
 import Header from "../components/Header";
 import BookForm from "../components/BookForm";
 
-function BookCreate({ onMoveToStart, onMoveToList, onMoveToCreate, onCreate }) {
+function BookCreate({ onMoveToStart, onMoveToList, onCreate }) {
   const [formData, setFormData] = useState({
     title: "",
     author: "",
@@ -34,8 +34,6 @@ function BookCreate({ onMoveToStart, onMoveToList, onMoveToCreate, onCreate }) {
     <>
       <Header
         onMoveToStart={onMoveToStart}
-        onMoveToList={onMoveToList}
-        onMoveToCreate={onMoveToCreate}
       />
 
       <main className="form-page">

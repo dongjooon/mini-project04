@@ -1,4 +1,4 @@
-function Header({ onMoveToStart, onMoveToList, onMoveToCreate }) {
+function Header({ onMoveToStart }) {
   return (
     <header className="header">
       <div className="header-logo">
@@ -18,15 +18,6 @@ function Header({ onMoveToStart, onMoveToList, onMoveToCreate }) {
           걷기가 서재
         </button>
       </div>
-
-      <nav className="header-nav">
-        <button type="button" onClick={onMoveToList}>
-          도서 목록
-        </button>
-        <button type="button" onClick={onMoveToCreate}>
-          새 도서 등록
-        </button>
-      </nav>
     </header>
   );
 }

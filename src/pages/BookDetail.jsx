@@ -4,7 +4,6 @@ function BookDetail({
   book,
   onMoveToStart,
   onMoveToList,
-  onMoveToCreate,
   onMoveToUpdate,
   onMoveToCoverUpdate,
   onDelete,
@@ -14,8 +13,6 @@ function BookDetail({
       <>
         <Header
           onMoveToStart={onMoveToStart}
-          onMoveToList={onMoveToList}
-          onMoveToCreate={onMoveToCreate}
         />
         <main className="detail-page">
           <p>선택된 도서가 없습니다.</p>
@@ -28,12 +25,24 @@ function BookDetail({
     <>
       <Header
         onMoveToStart={onMoveToStart}
-        onMoveToList={onMoveToList}
-        onMoveToCreate={onMoveToCreate}
       />
 
       <main className="detail-page">
         <section className="detail-container">
+          <button
+            type="button"
+            className="list-return-button detail-return-button"
+            onClick={onMoveToList}
+            aria-label="도서 목록으로 이동"
+          >
+            <svg aria-hidden="true" viewBox="0 0 28 24" width="28" height="22">
+              <path d="M4 6h20" />
+              <path d="M4 12h20" />
+              <path d="M4 18h20" />
+            </svg>
+            <span>목록으로</span>
+          </button>
+
           <div className="detail-cover">
             {book.coverImageUrl ? (
               <img src={book.coverImageUrl} alt={`${book.title} 표지`} />
