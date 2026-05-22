@@ -14,7 +14,6 @@ function BookCreate({ onAddBook, onMoveToList }) {
         <BookForm
           onAddBook={onAddBook}
           onCancel={onMoveToList}
-          submitText="등록하기"
         />
       </main>
     </div>

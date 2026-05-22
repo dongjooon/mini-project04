@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function BookForm({ onAddBook, onChange, onCancel, onMoveToList, submitText }) {
+function BookForm({ onAddBook, onCancel }) {
 
   const [formData, setFormData] = useState({
     title: "",
@@ -20,8 +20,7 @@ function BookForm({ onAddBook, onChange, onCancel, onMoveToList, submitText }) {
   };
 
 
-  const handleAddBook = (e) => {
-    e.preventDefault();
+  const handleAddBook = () => {
     if (!formData.title.trim()) {
       alert("도서 제목을 입력해주세요.");
       return;
@@ -94,7 +93,11 @@ function BookForm({ onAddBook, onChange, onCancel, onMoveToList, submitText }) {
       </div>
 
       <div className="form-buttons">
-        <button type="submit" onClick={handleAddBook}>{submitText}</button>
+        <button type="submit" onClick={() => {
+          handleAddBook;
+          alert("등록 되었습니다.");
+          onCancel;
+        }}>등록하기</button>
         <button type="button" onClick={onCancel}>
           취소
         </button>
