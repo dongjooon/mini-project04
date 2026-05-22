@@ -5,6 +5,44 @@
 
 ---
 
+## 🔄 시스템 흐름도 (System Data Flow)
+
+본 프로젝트는 사용자 요청에 따라 도서 데이터를 백엔드 데이터베이스에 연동하고, OpenAI GPT Image API를 호출하여 도서 표지 이미지를 생성하여 저장하는 유기적인 흐름으로 구성되어 있습니다.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as 사용자
+    participant UI as React 프론트엔드 (UI)
+    participant Server as Mock API (json-server)
+    participant OpenAI as OpenAI GPT Image API
+
+    %% 1. 도서 CRUD 흐름
+    rect rgb(240, 248, 255)
+        note right of User: [도서 관리 흐름]
+        User->>UI: 도서 등록 / 정보 수정 입력
+        UI->>Server: POST /newBook 또는 PATCH /update/:id
+        Server-->>UI: db.json 반영 및 결과 응답
+        UI-->>User: 화면에 도서 목록 및 상세 정보 노출
+    end
+
+    %% 2. AI 표지 생성 흐름
+    rect rgb(255, 240, 245)
+        note right of User: [AI 표지 생성 흐름]
+        User->>UI: 상세화면에서 'AI 표지 생성' 모달 열기 및 옵션 선택
+        User->>UI: OpenAI API Key 및 프롬프트 입력 후 생성 요청
+        UI->>OpenAI: 이미지 생성 API 호출 (POST /v1/images/generations)
+        Note over UI,OpenAI: b64_json 형태로 이미지 요청
+        OpenAI-->>UI: Base64 이미지 데이터 응답
+        Note over UI: Base64 데이터를 Data URL 포맷으로 가공
+        UI->>Server: PATCH /imageGen/:id (coverImageUrl 필드 업데이트)
+        Server-->>UI: db.json에 Data URL 영구 저장 완료
+        UI-->>User: onCoverGenerated 콜백으로 UI에 생성된 표지 즉각 반영
+    end
+```
+
+---
+
 ## 📅 일차별 미션 수행 현황
 
 ### 1일차 미션: 기획/설계 및 환경설정 (완료)
