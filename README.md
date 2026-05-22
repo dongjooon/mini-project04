@@ -1,7 +1,7 @@
 # 작가의 산책 (AI 도서 표지 생성 및 도서 관리 시스템)
 
 > **KT AIVLE SCHOOL AI트랙 9기 4차 미니 프로젝트**  
-> OpenAI DALL-E API를 활용한 AI 도서 표지 생성 기능이 통합된 리액트 기반의 도서 관리 시스템입니다.
+> OpenAI GPT IMAGE API를 활용한 AI 도서 표지 생성 기능이 통합된 리액트 기반의 도서 관리 시스템입니다.
 
 ---
 
@@ -11,7 +11,7 @@
 
 #### 📌 미션 1 (기획/설계)
 * **도서 데이터 모델 설계 완료**:
-  * [db.json](file:///c:/Users/User/Desktop/my-app/db.json)을 활용한 로컬 Mock 데이터베이스에 아래와 같은 도서 속성 구조를 확립했습니다.
+  * [db.json]db.json을 활용한 로컬 Mock 데이터베이스에 아래와 같은 도서 속성 구조를 확립했습니다.
     * `id` (도서 고유 식별자, string)
     * `title` (도서 제목, string)
     * `author` (작가명, string)
@@ -20,7 +20,7 @@
     * `coverImageUrl` (AI로 생성된 표지 이미지 데이터, string - Base64 Data URL)
     * `createdAt` / `updatedAt` (최초 등록일 / 최근 수정일 타임스탬프, string)
 * **팀 표준 API 엔드포인트 규칙 적용**:
-  * [routes.json](file:///c:/Users/User/Desktop/my-app/routes.json)을 통해 팀원 간 협의된 명세 기반의 단축 URL 호출 규칙을 프록시 매핑하여 연동의 독립성을 확보했습니다.
+  * [routes.json]routes.json을 통해 팀원 간 협의된 명세 기반의 단축 URL 호출 규칙을 프록시 매핑하여 연동의 독립성을 확보했습니다. 공유 PPT 적힌 내용 바탕으로 작성했습니다.
     * 목록 조회: `GET /books`
     * 도서 상세 조회: `GET /bookInfo/:id` -> `/books/:id`
     * 신규 도서 등록: `POST /newBook` -> `/books`
@@ -30,10 +30,11 @@
 
 #### 📌 미션 2 (환경설정)
 * **Vite + React (JavaScript) 개발 환경 정비**:
-  * 초기 설정의 TypeScript 구성을 가볍고 직관적인 JavaScript/JSX 컴포넌트 구조로 전면 정비 완료했습니다.
-  * [vite.config.js](file:///c:/Users/User/Desktop/my-app/vite.config.js) 빌드 최적화 및 [index.html](file:///c:/Users/User/Desktop/my-app/index.html) 진입점 매핑을 수정했습니다.
+  * 가볍고 직관적인 JavaScript/JSX 컴포넌트 구조로 전면 정비 완료했습니다.
 * **json-server 백엔드 목업 구축**:
   * `json-server` 패키지를 설치 및 세팅하고, `package.json`의 `npm run server` 스크립트를 통해 파일 변경 실시간 감시(`--watch`) 옵션을 켜두어 로컬 REST API 연동을 성공적으로 구현했습니다.
+  npm install json-server@0.17.4
+
 * **Material UI (MUI) 기반 공통 레이아웃 설계**:
   * `@mui/material`, `@emotion/react`, `@emotion/styled`, `@mui/icons-material`를 적용했습니다.
   * 상단 네비게이션 헤더(`AppBar`), 페이지 중앙화 배치(`Container`), 하단 저작권 푸터(`footer`)를 포함한 [Layout.jsx](file:///c:/Users/User/Desktop/my-app/src/components/Layout.jsx) 공통 컴포넌트를 구축했습니다.
@@ -76,7 +77,7 @@
 
 #### 📌 미션 6 (저장·UX 완성)
 * **서버 저장 및 UI 동적 업데이트**:
-  * 이미지 생성이 성공하면 즉시 **`PATCH /imageGen/:id`**를 호출하여 가상의 백엔드 서버 `db.json` 파일에 생성된 표지 Data URL 주소를 최종적으로 영구 저장했습니다.
+  * 이미지 생성이 성공하면 즉시 `PATCH /imageGen/:id`를 호출하여 가상의 백엔드 서버 `db.json` 파일에 생성된 표지 Data URL 주소를 최종적으로 영구 저장했습니다.
   * 통신 성공 직후, 메인 화면과 상세 화면의 도서 커버 표지 일러스트 영역이 로딩 지연 현상 없이 즉각적으로 새로운 생성 이미지로 갱신될 수 있도록 전역 콜백(onCoverGenerated) 상태 전이를 설계했습니다.
 * **통신 로딩 및 오류 예외 처리**:
   * API 호출 시 버튼 비활성화 및 로딩 스피너(`CircularProgress`) 애니메이션을 연동해 연동 대기 상황을 명확하게 인지할 수 있도록 보완했습니다.
