@@ -1,11 +1,69 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const [books, setBooks] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function  loadBooks() {
+      try {
+        const res = await fetch('http://localhost:3000/posts');
+        const data = await res.json();
+        setBooks(data);
+      } catch(err) {
+        console.error(err);
+        setError('도서 정보를 불러올 수 없습니다.');
+      }
+    }
+    loadBooks();
+  }, []);
+
+  const handleNewBook = async (book) => {
+    try {
+      const res = await fetch('http://localhost:3000/newBook/' + book.id, {
+        method: 'POST',
+        headers: { 'Content_Type': 'application/json' },
+        body: JSON.stringify(book)
+      });
+      const saved = await res.json();
+      setBooks([saved, ...books]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleBookDelete = async (id) => {
+    try {
+      await fetch('http://localhost:3000/bookDelete/' + id, {
+        method: 'DELETE',
+      });
+      setBooks(books.filter(b => b.id !== id));
+    } catch(eff) {
+      console.error(err);
+    }
+  };
+
+  const handleBookUpdate = async (updatedBook) => {
+    try {
+      const book = books.find(b => b.id === updatedBook.id);
+      const res = await fetch('http://localhost:3000/update/' + id, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify({ content: updatedBook.content/* 필요시 update할 컬럼을 더 작성 */})
+      });
+      const updated = await res.json();
+      setBooks(books.map(b => b.id === updatedBook.id ? updated : b))
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  
 
   return (
     <>
