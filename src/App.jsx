@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useEffect } from "react";
 import StartPage from "./pages/StartPage";
 import BookList from "./pages/BookList";
 import BookDetail from "./pages/BookDetail";
@@ -8,7 +9,38 @@ import CoverUpdate from "./pages/CoverUpdate";
 
 function App() {
   const [page, setPage] = useState("start");
+  const [books, setBooks] = useState([]);
   const [selectedBook, setSelectedBook] = useState(null);
+
+  useEffect(() => {
+    async function loadBooks() {
+      try {
+        const response = await fetch("http://localhost:3000/books");
+        const data = await response.json();
+        setBooks(data);
+        console.log("책 데이터: ", data);
+      } catch (error) {
+        console.error("에러: ", error);
+      }
+    };
+    loadBooks();
+  }, []);
+
+  const handleAddBook = async (newBook) => {
+    try {
+      const response = await fetch("http://localhost:3000/books", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newBook),
+      });
+      const createdBook = await response.json();
+      setBooks([...books, createdBook]);
+    } catch (error) {
+      console.error("에러: ", error);
+    }
+  };
 
   const moveToList = () => {
     setPage("list");
@@ -33,6 +65,8 @@ function App() {
     setPage("coverUpdate");
   };
 
+
+
   return (
     <>
       {page === "start" && (
@@ -44,6 +78,7 @@ function App() {
 
       {page === "list" && (
         <BookList
+          books={books}
           onMoveToDetail={moveToDetail}
           onMoveToCreate={moveToCreate}
         />
@@ -58,11 +93,11 @@ function App() {
         />
       )}
 
-      {page === "create" && <BookCreate onMoveToList={moveToList} />}
+      {page === "create" && <BookCreate onAddBook={handleAddBook} onMoveToList={moveToList} />}
 
       {page === "update" && (
         <BookUpdate
-          book={selectedBook}
+          selectedBook={selectedBook}
           onMoveToDetail={moveToDetail}
           onMoveToList={moveToList}
         />

@@ -1,13 +1,62 @@
-function BookForm({ formData, onChange, onSubmit, onCancel, submitText }) {
+import { useState } from "react";
+
+function BookForm({ onAddBook, onChange, onCancel, onMoveToList, submitText }) {
+
+  const [formData, setFormData] = useState({
+    title: "",
+    author: "",
+    publisher: "",
+    content: "",
+  });
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+
+  const handleAddBook = (e) => {
+    e.preventDefault();
+    if (!formData.title.trim()) {
+      alert("도서 제목을 입력해주세요.");
+      return;
+    }
+
+    console.log("안녕");
+    console.log("title: ", formData.title);
+    const newBook = {
+      title: formData.title,
+      author: formData.author,
+      publisher: formData.publisher,
+      content: formData.content,
+      imageUrl: "",
+      created: new Date().toLocaleString(),
+      updated: new Date().toLocaleString()
+    };
+
+    onAddBook(newBook);
+    setFormData({
+      title: "",
+      author: "",
+      publisher: "",
+      content: "",
+    });
+  }
+
   return (
-    <form className="book-form" onSubmit={onSubmit}>
+    <form className="book-form" onSubmit={handleAddBook}>
       <div className="form-group">
         <label>도서 제목</label>
         <input
           type="text"
           name="title"
           value={formData.title}
-          onChange={onChange}
+          onChange={handleChange}
           placeholder="도서 제목을 입력하세요"
         />
       </div>
@@ -18,7 +67,7 @@ function BookForm({ formData, onChange, onSubmit, onCancel, submitText }) {
           type="text"
           name="author"
           value={formData.author}
-          onChange={onChange}
+          onChange={handleChange}
           placeholder="저자를 입력하세요"
         />
       </div>
@@ -29,7 +78,7 @@ function BookForm({ formData, onChange, onSubmit, onCancel, submitText }) {
           type="text"
           name="publisher"
           value={formData.publisher}
-          onChange={onChange}
+          onChange={handleChange}
           placeholder="출판사를 입력하세요"
         />
       </div>
@@ -39,13 +88,13 @@ function BookForm({ formData, onChange, onSubmit, onCancel, submitText }) {
         <textarea
           name="content"
           value={formData.content}
-          onChange={onChange}
+          onChange={handleChange}
           placeholder="도서 소개를 입력하세요"
         />
       </div>
 
       <div className="form-buttons">
-        <button type="submit">{submitText}</button>
+        <button type="submit" onClick={handleAddBook}>{submitText}</button>
         <button type="button" onClick={onCancel}>
           취소
         </button>
