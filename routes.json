@@ -1,0 +1,7 @@
+{
+  "/bookInfo/:id": "/books/:id",
+  "/newBook": "/books",
+  "/update/:id": "/books/:id",
+  "/imageGen/:id": "/books/:id",
+  "/bookDelete/:id": "/books/:id"
+}

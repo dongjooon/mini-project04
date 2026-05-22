@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "json-server --watch db.json --port 3000 --routes routes.json",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

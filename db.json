@@ -1,0 +1,14 @@
+{
+  "books": [
+    {
+      "id": "1",
+      "title": "장장장 서점",
+      "author": "장장장",
+      "content": "장장장의 1년을 담은 에세이",
+      "coverImageUrl": "",
+      "publisher": "장장장 출판사",
+      "createdAt": "2026-04-24T09:00:00.000Z",
+      "updatedAt": "2026-04-24T09:00:00.000Z"
+    }
+  ]
+}
