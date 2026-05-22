@@ -123,6 +123,31 @@ sequenceDiagram
 
 ---
 
+## 📂 프로젝트 폴더 구조
+
+```text
+my-app/
+├── public/                 # 정적 자산 폴더
+├── src/                    # 소스 코드 폴더
+│   ├── assets/             # 이미지 및 에셋 폴더
+│   ├── components/         # React 공통 및 하위 컴포넌트
+│   │   ├── AICoverModal.jsx # OpenAI GPT Image API 표지 생성 모달
+│   │   ├── BookDetail.jsx   # 도서 상세 조회 및 삭제 화면
+│   │   ├── BookForm.jsx     # 도서 등록 및 수정 폼
+│   │   ├── BookList.jsx     # 도서 목록 및 검색/정렬 화면
+│   │   └── Layout.jsx       # MUI 기반 공통 레이아웃 (헤더, 네비게이션, 푸터)
+│   ├── App.jsx             # 메인 앱 컴포넌트 (라우팅 및 상태 관리)
+│   ├── index.css           # 전역 CSS 스타일 및 테마 변수 정의
+│   └── main.jsx            # React 엔트리 포인트 및 테마 공급자 설정
+├── db.json                 # 로컬 Mock 데이터베이스 (도서 데이터 저장)
+├── routes.json             # json-server API 엔드포인트 프록시 맵핑 규칙
+├── package.json            # 의존성 및 실행 스크립트 정의
+├── vite.config.js          # Vite 빌드 환경 설정
+└── README.md               # 프로젝트 개요 및 미션 수행 가이드
+```
+
+---
+
 ## 🛠️ 실행 및 구동 방법
 
 로컬에서 원활하게 도서 및 AI 기능을 연동해 테스트하려면 2개의 터미널 창을 열고 백엔드와 프론트엔드를 동시에 기동해 주어야 합니다.
