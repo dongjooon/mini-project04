@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     async function  loadBooks() {
       try {
-        const res = await fetch('http://localhost:3000/posts');
+        const res = await fetch('http://localhost:3000/books');
         const data = await res.json();
         setBooks(data);
       } catch(err) {
@@ -51,7 +51,7 @@ function App() {
   const handleBookUpdate = async (updatedBook) => {
     try {
       const book = books.find(b => b.id === updatedBook.id);
-      const res = await fetch('http://localhost:3000/update/' + id, {
+      const res = await fetch('http://localhost:3000/update/' + updatedBook.id, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({ content: updatedBook.content/* 필요시 update할 컬럼을 더 작성 */})
@@ -63,7 +63,7 @@ function App() {
     }
   };
 
-  
+
 
   return (
     <>
