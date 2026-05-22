@@ -5,10 +5,10 @@
  * - 생성된 이미지(b64_json)를 Data URL 포맷으로 변환한 뒤, local db.json 서버에 PATCH 요청으로 전송하여 저장합니다.
  */
 import React, { useState, useEffect } from 'react';
-import { 
-  Dialog, DialogTitle, DialogContent, DialogActions, Button, 
-  TextField, FormControl, InputLabel, Select, MenuItem, 
-  Box, Typography, CircularProgress, Alert, InputAdornment, IconButton 
+import {
+  Dialog, DialogTitle, DialogContent, DialogActions, Button,
+  TextField, FormControl, InputLabel, Select, MenuItem,
+  Box, Typography, CircularProgress, Alert, InputAdornment, IconButton
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -33,7 +33,6 @@ export const AICoverModal = ({ open, book, onClose, onCoverGenerated }) => {
   const [quality, setQuality] = useState('low');
   const [outputFormat, setOutputFormat] = useState('png');
   const [prompt, setPrompt] = useState('');
-  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -49,7 +48,7 @@ export const AICoverModal = ({ open, book, onClose, onCoverGenerated }) => {
       // 로컬스토리지에서 기존 키 자동 복구
       const savedKey = localStorage.getItem('openai_api_key');
       if (savedKey) setApiKey(savedKey);
-      
+
       // AI가 텍스트(문자)를 그리는 것을 피하기 위한 네거티브 키워드("no text on the cover")를 포함한 고품질 프롬프트 설계
       setPrompt(`A beautiful artistic book cover for a book titled "${book.title}", which is written by "${book.author}". The content is about: ${book.content}. Highly detailed, illustration style, no text on the cover.`);
       setError(null);
@@ -104,7 +103,7 @@ export const AICoverModal = ({ open, book, onClose, onCoverGenerated }) => {
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
         const errMsg = errData?.error?.message || `HTTP 에러 ${response.status}`;
-        
+
         if (response.status === 401) {
           throw new Error('API Key가 올바르지 않습니다. 키를 다시 확인해주세요.');
         } else if (response.status === 429) {
@@ -116,7 +115,7 @@ export const AICoverModal = ({ open, book, onClose, onCoverGenerated }) => {
 
       const resData = await response.json();
       const b64Json = resData.data?.[0]?.b64_json;
-      
+
       if (!b64Json) {
         throw new Error('응답데이터에서 이미지(b64_json)를 추출하지 못했습니다.');
       }
@@ -162,8 +161,8 @@ export const AICoverModal = ({ open, book, onClose, onCoverGenerated }) => {
   };
 
   return (
-    <Dialog 
-      open={open} 
+    <Dialog
+      open={open}
       onClose={loading ? undefined : onClose}
       maxWidth="sm"
       fullWidth
@@ -180,7 +179,7 @@ export const AICoverModal = ({ open, book, onClose, onCoverGenerated }) => {
           </IconButton>
         )}
       </DialogTitle>
-      
+
       <DialogContent dividers>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, py: 1 }}>
           {error && (
@@ -295,8 +294,8 @@ export const AICoverModal = ({ open, book, onClose, onCoverGenerated }) => {
 
       {/* 모달 하단 액션 영역 */}
       <DialogActions sx={{ p: 2.5 }}>
-        <Button 
-          onClick={onClose} 
+        <Button
+          onClick={onClose}
           disabled={loading}
           sx={{ color: '#555', fontWeight: 600 }}
         >
