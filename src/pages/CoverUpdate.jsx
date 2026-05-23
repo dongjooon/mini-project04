@@ -27,20 +27,22 @@ function CoverUpdate({
     );
   }
 
-  const handleGenerateCover = () => {
+  const handleGenerateCover = async() => {
     if (!apiKey.trim()) {
       alert("API Key를 입력해주세요.");
       return;
     }
 
-    console.log("표지 생성 요청 정보:", {
-      bookId: book.id,
-      apiKeyLength: apiKey.length,
+        try { await onGenerateCover({
+      book,
+      apiKey,
       model,
       quality,
     });
-
-    onGenerateCover(book);
+    } catch (error) {
+      console.error(error);
+      alert(error.message || "표지 생성 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -101,7 +103,8 @@ function CoverUpdate({
           </div>
 
           <div className="section-card cover-result-area">
-            <CoverPreview imageUrl={previewImage} />
+            <CoverPreview imageUrl={previewImage}
+              onClick={() => onMoveToDetail(book)} />
 
             <div className="cover-book-info">
               <h3>{book.title}</h3>

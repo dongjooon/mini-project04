@@ -181,50 +181,90 @@ function App() {
     }
   };
 
-  const handleGenerateCover = async (book) => {
-    const colorList = ["#2f7f6f", "#b8455f", "#1f4c73", "#7b5ea7", "#d08a3c"];
-    const randomColor = colorList[Math.floor(Math.random() * colorList.length)];
+ const handleGenerateCover = async ({ book, apiKey, model, quality }) => {
+  const OPENAI_IMAGE_API_URL =
+    "https://api.openai.com/v1/images/generations";
 
-    const svg = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="400" height="560">
-        <rect width="400" height="560" fill="${randomColor}" />
-        <text x="40" y="90" fill="white" font-size="24" font-family="Arial">AI BOOK COVER</text>
-        <text x="40" y="270" fill="white" font-size="38" font-weight="700" font-family="Arial">${book.title}</text>
-        <text x="40" y="500" fill="white" font-size="24" font-family="Arial">${book.author}</text>
-      </svg>
-    `;
+  const prompt = `
+    다음 도서에 어울리는 책 표지 이미지를 생성해주세요.
 
-    const imageSrc = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+    도서 제목: ${book.title}
+    저자: ${book.author}
+    출판사: ${book.publisher || ""}
+    도서 내용: ${book.content}
 
-    try {
-      const res = await fetch(`${API_URL}/${book.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          coverImageUrl: imageSrc,
-          updatedAt: new Date().toISOString().slice(0, 10),
-        }),
-      });
+    요구사항:
+    - 세로형 책 표지 디자인
+    - 깔끔하고 전문적인 분위기
+    - 도서 내용과 어울리는 이미지 중심 디자인
+    - 실제 서점에 있을 법한 표지 느낌
+    - 글자는 너무 많이 넣지 않기
+`;
 
-      if (!res.ok) {
-        throw new Error("표지 저장 실패");
-      }
+  try {
+    setMessage("AI 표지를 생성하고 있습니다...");
 
-      const savedBook = await res.json();
+    const res = await fetch(OPENAI_IMAGE_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: model,
+        prompt: prompt,
+        n: 1,
+        size: "1024x1536",
+        quality: quality,
+        output_format: "png",
+      }),
+    });
 
-      setBooks((prevBooks) =>
-        prevBooks.map((item) => (item.id === savedBook.id ? savedBook : item))
-      );
-      setSelectedId(savedBook.id);
-      setMessage("표지 시안을 생성했습니다.");
-      setPage("detail");
-    } catch (error) {
-      console.error(error);
-      setMessage("표지 생성 중 오류가 발생했습니다.");
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error?.message || "OpenAI 요청 실패");
     }
-  };
+
+    const b64Json = data.data?.[0]?.b64_json;
+
+    if (!b64Json) {
+      throw new Error("이미지 데이터가 응답에 없습니다.");
+    }
+
+    const imageSrc = `data:image/png;base64,${b64Json}`;
+
+    const patchRes = await fetch(`${API_URL}/${book.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        coverImageUrl: imageSrc,
+        updatedAt: new Date().toISOString().slice(0, 10),
+      }),
+    });
+
+    if (!patchRes.ok) {
+      throw new Error("표지 저장 실패");
+    }
+
+    const savedBook = await patchRes.json();
+
+    setBooks((prevBooks) =>
+      prevBooks.map((item) => (item.id === savedBook.id ? savedBook : item))
+    );
+
+    setSelectedId(savedBook.id);
+    setMessage("AI 표지를 생성했습니다.");
+    setPage("detail");
+  } catch (error) {
+    console.error(error);
+    setMessage(error.message || "표지 생성 중 오류가 발생했습니다.");
+    alert(error.message || "표지 생성 중 오류가 발생했습니다.");
+  }
+};
+  
 
   return (
     <div className="app">

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Header from "../components/Header";
 
 function BookDetail({
@@ -8,12 +9,12 @@ function BookDetail({
   onMoveToCoverUpdate,
   onDelete,
 }) {
+  const [isCoverOpen, setIsCoverOpen] = useState(false);
+
   if (!book) {
     return (
       <>
-        <Header
-          onMoveToStart={onMoveToStart}
-        />
+        <Header onMoveToStart={onMoveToStart} />
         <main className="detail-page">
           <p>선택된 도서가 없습니다.</p>
         </main>
@@ -23,9 +24,7 @@ function BookDetail({
 
   return (
     <>
-      <Header
-        onMoveToStart={onMoveToStart}
-      />
+      <Header onMoveToStart={onMoveToStart} />
 
       <main className="detail-page">
         <section className="detail-container">
@@ -43,7 +42,15 @@ function BookDetail({
             <span>목록으로</span>
           </button>
 
-          <div className="detail-cover">
+          <div
+            className="detail-cover"
+            onClick={() => {
+              if (book.coverImageUrl) {
+                setIsCoverOpen(true);
+              }
+            }}
+            style={{ cursor: book.coverImageUrl ? "pointer" : "default" }}
+          >
             {book.coverImageUrl ? (
               <img src={book.coverImageUrl} alt={`${book.title} 표지`} />
             ) : (
@@ -77,12 +84,38 @@ function BookDetail({
               <button type="button" onClick={() => onMoveToUpdate(book)}>
                 수정하기
               </button>
-              <button type="button" className="danger-button" onClick={() => onDelete(book)}>
+              <button
+                type="button"
+                className="danger-button"
+                onClick={() => onDelete(book)}
+              >
                 삭제
               </button>
             </div>
           </div>
         </section>
+
+        {isCoverOpen && book.coverImageUrl && (
+          <div
+            className="cover-modal-backdrop"
+            onClick={() => setIsCoverOpen(false)}
+          >
+            <div
+              className="cover-modal-content"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                className="cover-modal-close"
+                onClick={() => setIsCoverOpen(false)}
+              >
+                ×
+              </button>
+
+              <img src={book.coverImageUrl} alt={`${book.title} 표지 크게 보기`} />
+            </div>
+          </div>
+        )}
       </main>
     </>
   );
