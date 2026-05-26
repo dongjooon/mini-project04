@@ -2,8 +2,9 @@ import Header from "../components/Header";
 import BookCard from "../components/BookCard";
 
 function BookList({
-  books,
-  popularBooks,
+  books = [],
+  popularBooks = [],
+  newBooks = [],
   search,
   onSearch,
   onMoveToStart,
@@ -11,19 +12,6 @@ function BookList({
   onMoveToDetail,
   onMoveToCreate,
 }) {
-
-  const popularBooks = [...books].slice(0, 3);
-
-  const newBooks = [...books]
-    .sort((a, b) => {
-      if (a.createdAt && b.createdAt) {
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      }
-
-      return Number(b.id) - Number(a.id);
-    })
-    .slice(0, 3);
-
 
   return (
     <>
@@ -60,24 +48,6 @@ function BookList({
               </button>
             </div>
           </div>
-          <section className="book-section">
-            <h3>인기 도서</h3>
-
-              {popularBooks?.length > 0 ? (
-                <div className="book-grid">
-                  {popularBooks.slice(0, 3).map((book) => (
-                    <BookCard
-                      key={book.id}
-                      book={book}
-                      onClick={() => onMoveToDetail(book)}
-                    />
-                  ))}
-                </div>
-            ) : (
-              <div className="empty-state">아직 인기 도서가 없습니다.
-              </div>
-            )}
-            </section>
 
           {books.length > 0 ? (
             <>
