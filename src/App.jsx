@@ -44,7 +44,7 @@ function App() {
         }
         return b.id - a.id;
       })
-      .slice(0, 4);
+      .slice(0, 3);
   }, [books]);
 
   const popularBooks = useMemo(() => {
@@ -57,7 +57,7 @@ function App() {
         }
         return b.id - a.id;
       })
-      .slice(0, 4);
+      .slice(0, 3);
   }, [books]);
 
   const loadBooks = useCallback(async () => {
