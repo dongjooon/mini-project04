@@ -65,6 +65,7 @@ function BookUpdate({
             onSubmit={handleSubmit}
             onCancel={() => onMoveToDetail(book)}
             submitText="수정하기"
+            cancelClassName="danger-button"
           />
         </section>
       </main>

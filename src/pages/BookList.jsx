@@ -1,5 +1,8 @@
+import { useMemo, useState } from "react";
 import Header from "../components/Header";
 import BookCard from "../components/BookCard";
+
+const BOOKS_PER_PAGE = 12;
 
 function BookList({
   books,
@@ -10,6 +13,21 @@ function BookList({
   onMoveToDetail,
   onMoveToCreate,
 }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(books.length / BOOKS_PER_PAGE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+
+  const pagedBooks = useMemo(() => {
+    const startIndex = (safeCurrentPage - 1) * BOOKS_PER_PAGE;
+
+    return books.slice(startIndex, startIndex + BOOKS_PER_PAGE);
+  }, [books, safeCurrentPage]);
+
+  const handleSearchChange = (value) => {
+    setCurrentPage(1);
+    onSearch(value);
+  };
+
   return (
     <>
       <Header
@@ -34,9 +52,13 @@ function BookList({
                 <input
                   type="text"
                   value={search}
-                  onChange={(e) => onSearch(e.target.value)}
-                  placeholder="도서명, 저자, 내용 검색"
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  placeholder="도서를 검색해주세요"
                 />
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24">
+                  <path d="m21 21-4.35-4.35" />
+                  <circle cx="11" cy="11" r="7" />
+                </svg>
               </div>
 
               <button
@@ -44,21 +66,47 @@ function BookList({
                 className="create-button"
                 onClick={onMoveToCreate}
               >
-                새 도서 등록
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
+                  <path d="M12 5v14" />
+                  <path d="M5 12h14" />
+                </svg>
+                <span>새 도서 등록</span>
               </button>
             </div>
           </div>
 
           {books.length > 0 ? (
-            <div className="book-grid">
-              {books.map((book) => (
-                <BookCard
-                  key={book.id}
-                  book={book}
-                  onClick={() => onMoveToDetail(book)}
-                />
-              ))}
-            </div>
+            <>
+              <div className="book-grid">
+                {pagedBooks.map((book) => (
+                  <BookCard
+                    key={book.id}
+                    book={book}
+                    onClick={() => onMoveToDetail(book)}
+                  />
+                ))}
+              </div>
+
+              {totalPages > 1 && (
+                <nav className="pagination" aria-label="도서 목록 페이지">
+                  {Array.from({ length: totalPages }, (_, index) => {
+                    const pageNumber = index + 1;
+
+                    return (
+                      <button
+                        key={pageNumber}
+                        type="button"
+                        className={pageNumber === safeCurrentPage ? "is-active" : ""}
+                        onClick={() => setCurrentPage(pageNumber)}
+                        aria-current={pageNumber === safeCurrentPage ? "page" : undefined}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  })}
+                </nav>
+              )}
+            </>
           ) : (
             <div className="empty-state">검색 결과에 맞는 도서가 없습니다.</div>
           )}
