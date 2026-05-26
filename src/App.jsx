@@ -25,12 +25,26 @@ function App() {
 
     if (!keyword) return books;
 
+    if (keyword.startsWith("#")) {
+      const searchTag = keyword.replace(/^#/, "").trim(); // 검색어에서 맨 앞 '#' 제거 (예: "#소설" -> "소설")
+
+      if (!searchTag) return books;
+
+      return books.filter((book) => {
+        if (!book.tags) return false;
+
+        const tagArray = book.tags.toLowerCase().replace(/#/g, "").split(" ");
+        return tagArray.some((tag) => tag.includes(searchTag));
+      });
+    }
+
     return books.filter((book) => {
       return (
         book.title.toLowerCase().includes(keyword) ||
         book.author.toLowerCase().includes(keyword) ||
         book.publisher.toLowerCase().includes(keyword) ||
-        book.content.toLowerCase().includes(keyword)
+        book.content.toLowerCase().includes(keyword) ||
+        book.tags?.toLowerCase().includes(keyword)
       );
     });
   }, [books, search]);
