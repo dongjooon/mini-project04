@@ -233,6 +233,21 @@ img {
   color: #ffffff;
 }
 
+.detail-buttons button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.detail-buttons button svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .start-page {
   min-height: calc(100svh - 136px);
   display: flex;
@@ -466,7 +481,8 @@ img {
 }
 
 .book-cover.has-image,
-.detail-cover.has-image {
+.detail-cover.has-image,
+.cover-preview.has-image {
   justify-content: center;
   align-items: center;
   background: #172d3a;
@@ -490,6 +506,99 @@ img {
   object-fit: contain !important;
   border-radius: 4px;
   box-shadow: 0 10px 22px rgba(4, 16, 28, 0.28);
+}
+
+.cover-preview-menu {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+}
+
+.cover-preview-menu-button {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.26);
+}
+
+.cover-preview-menu-button svg {
+  fill: currentColor;
+}
+
+.cover-preview-menu-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 120px;
+  padding: 6px;
+  border: 1px solid #e8b9ae;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.2);
+}
+
+.cover-preview-menu-panel button {
+  width: 100%;
+  min-height: 38px;
+  border: 0;
+  border-radius: 8px;
+  background: #fff8f5;
+  color: #a33d2d;
+  font-weight: 800;
+}
+
+.cover-preview-menu-panel button:hover {
+  background: #fdebe5;
+}
+
+.cover-preview-upload-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  display: inline-grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  border-radius: 999px;
+  background: rgba(20, 55, 92, 0.88);
+  color: #ffffff;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.28);
+  cursor: pointer;
+  transition:
+    transform 0.16s ease,
+    background 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.cover-preview-upload-button:hover {
+  transform: translate(-50%, -52%);
+  background: #0f2e4f;
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.34);
+}
+
+.cover-preview-upload-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.cover-preview-upload-button svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .book-cover span,

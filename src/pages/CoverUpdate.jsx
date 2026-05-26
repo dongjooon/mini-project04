@@ -8,6 +8,7 @@ function CoverUpdate({
   onMoveToStart,
   onMoveToDetail,
   onGenerateCover,
+  onSaveCoverImage,
 }) {
   const [apiKey, setApiKey] = useState("");
   const [model, setModel] = useState("gpt-image-2");
@@ -51,6 +52,37 @@ function CoverUpdate({
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  const handleLocalImageChange = async (e) => {
+    const file = e.target.files?.[0];
+
+    e.target.value = "";
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("이미지 파일만 선택해주세요.");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      await onSaveCoverImage(book, reader.result);
+    };
+    reader.onerror = () => {
+      alert("이미지 파일을 읽지 못했습니다.");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDeleteCoverImage = async () => {
+    const isConfirm = window.confirm("생성된 표지를 삭제하고 기본 이미지로 되돌릴까요?");
+
+    if (!isConfirm) return;
+
+    await onSaveCoverImage(book, "");
   };
 
   return (
@@ -117,6 +149,9 @@ function CoverUpdate({
             <CoverPreview
               imageUrl={previewImage}
               isLoading={isGenerating}
+              onDelete={handleDeleteCoverImage}
+              onUploadImage={handleLocalImageChange}
+              isUploadDisabled={isGenerating}
               onClick={() => {
                 if (previewImage) {
                   setIsCoverOpen(true);

@@ -286,6 +286,39 @@ function App() {
     }
   };
 
+  const handleSaveCoverImage = async (book, imageSrc) => {
+    try {
+      const res = await fetch(`${API_URL}/${book.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          coverImageUrl: imageSrc,
+          updatedAt: new Date().toISOString().slice(0, 10),
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("표지 저장 실패");
+      }
+
+      const savedBook = await res.json();
+
+      setBooks((prevBooks) =>
+        prevBooks.map((item) => (item.id === savedBook.id ? savedBook : item))
+      );
+
+      setSelectedId(savedBook.id);
+      setMessage("");
+      return savedBook;
+    } catch (error) {
+      console.error(error);
+      setMessage(error.message || "표지 저장 중 오류가 발생했습니다.");
+      alert(error.message || "표지 저장 중 오류가 발생했습니다.");
+    }
+  };
+
   const handleExtractTags = async (content, apiKey) => {
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -373,6 +406,7 @@ function App() {
           onMoveToStart={moveToList}
           onMoveToDetail={moveToDetail}
           onGenerateCover={handleGenerateCover}
+          onSaveCoverImage={handleSaveCoverImage}
         />
       )}
     </div>
