@@ -11,6 +11,20 @@ function BookList({
   onMoveToDetail,
   onMoveToCreate,
 }) {
+
+  const popularBooks = [...books].slice(0, 3);
+
+  const newBooks = [...books]
+    .sort((a, b) => {
+      if (a.createdAt && b.createdAt) {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+
+      return Number(b.id) - Number(a.id);
+    })
+    .slice(0, 3);
+
+
   return (
     <>
       <Header onMoveToStart={onMoveToStart} onMoveToList={onMoveToList} />
@@ -66,8 +80,26 @@ function BookList({
             </section>
 
           {books.length > 0 ? (
+            <>
+              <section className="book-section">
+                <h3 className="book-section-title">인기도서</h3>
+
+                <div className="book-grid">
+                  {popularBooks.map((book) => (
+                    <BookCard
+                      key={book.id}
+                      book={book}
+                      onClick={() => onMoveToDetail(book)}
+                    />
+                  ))}
+                </div>
+              </section>
+
+              <section className="book-section">
+                <h3 className="book-section-title">신작도서</h3>
+
             <div className="book-grid">
-              {books.map((book) => (
+              {newBooks.map((book) => (
                 <BookCard
                   key={book.id}
                   book={book}
@@ -75,6 +107,8 @@ function BookList({
                 />
               ))}
             </div>
+          </section>
+        </>
           ) : (
             <div className="empty-state">검색 결과에 맞는 도서가 없습니다.</div>
           )}
