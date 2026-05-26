@@ -89,12 +89,12 @@ function App() {
   };
 
   const handleCreateBook = async (formData) => {
-    const today = new Date().toISOString().slice(0, 10);
+    const now = new Date().toISOString();
     const newBook = {
       ...formData,
       coverImageUrl: "",
-      createdAt: today,
-      updatedAt: today,
+      createdAt: now,
+      updatedAt: now,
     };
 
     try {
