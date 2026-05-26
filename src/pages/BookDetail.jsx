@@ -76,7 +76,8 @@ function BookDetail({
             </div>
 
             <p className="date-text">
-              등록일: {book.createdAt} / 수정일: {book.updatedAt}
+              등록일: {book.createdAt.slice(0, 10)} / 수정일:{" "}
+              {book.updatedAt.slice(0, 10)}
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <p className="likeCount">추천수 : {book.likeCount}</p>
