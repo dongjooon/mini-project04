@@ -1,4 +1,11 @@
-function BookForm({ formData, onChange, onSubmit, onCancel, submitText }) {
+function BookForm({
+  formData,
+  onChange,
+  onSubmit,
+  onCancel,
+  submitText,
+  cancelClassName = "",
+}) {
   return (
     <form className="book-form" onSubmit={onSubmit}>
       <div className="form-group">
@@ -46,7 +53,7 @@ function BookForm({ formData, onChange, onSubmit, onCancel, submitText }) {
 
       <div className="form-buttons">
         <button type="submit">{submitText}</button>
-        <button type="button" onClick={onCancel}>
+        <button type="button" className={cancelClassName} onClick={onCancel}>
           취소
         </button>
       </div>
