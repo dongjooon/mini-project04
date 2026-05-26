@@ -5,7 +5,6 @@ function PopularBooksSection({ popularBooks, onMoveToDetail }) {
     <div className="popular-books-section">
       <div className="section-title">
         <h3>인기 도서</h3>
-        <p>추천수가 높은 인기 도서 3개입니다.</p>
       </div>
       {popularBooks.length > 0 ? (
         <div className="book-grid">

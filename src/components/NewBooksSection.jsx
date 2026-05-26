@@ -5,7 +5,6 @@ function NewBooksSection({ newBooks, onMoveToDetail }) {
     <div className="new-books-section">
       <div className="section-title">
         <h3>신작 도서</h3>
-        <p>최근 등록된 도서 3개입니다.</p>
       </div>
       {newBooks.length > 0 ? (
         <div className="book-grid">
