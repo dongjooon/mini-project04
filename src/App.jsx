@@ -12,6 +12,7 @@ function App() {
   const [books, setBooks] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [search, setSearch] = useState("");
+  const [listPage, setListPage] = useState(1);
   const [message, setMessage] = useState("");
 
   const selectedBook = useMemo(
@@ -61,6 +62,12 @@ function App() {
   }, [loadBooks]);
 
   const moveToList = () => {
+    setListPage(1);
+    setMessage("");
+    setPage("list");
+  };
+
+  const moveBackToList = () => {
     setMessage("");
     setPage("list");
   };
@@ -275,6 +282,8 @@ function App() {
           books={filteredBooks}
           search={search}
           onSearch={setSearch}
+          currentPage={listPage}
+          onPageChange={setListPage}
           onMoveToStart={moveToList}
           onMoveToList={moveToList}
           onMoveToDetail={moveToDetail}
@@ -287,6 +296,7 @@ function App() {
           book={selectedBook}
           onMoveToStart={moveToList}
           onMoveToList={moveToList}
+          onMoveBackToList={moveBackToList}
           onMoveToUpdate={moveToUpdate}
           onMoveToCoverUpdate={moveToCoverUpdate}
           onDelete={handleDeleteBook}

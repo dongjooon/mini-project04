@@ -6,11 +6,13 @@ function BookDetail({
   book,
   onMoveToStart,
   onMoveToList,
+  onMoveBackToList,
   onMoveToUpdate,
   onMoveToCoverUpdate,
   onDelete,
 }) {
   const [isCoverOpen, setIsCoverOpen] = useState(false);
+  const hasCoverImage = Boolean(book?.coverImageUrl);
 
   if (!book) {
     return (
@@ -29,31 +31,57 @@ function BookDetail({
 
       <main className="detail-page">
         <section className="detail-container">
-          <button
-            type="button"
-            className="list-return-button detail-return-button"
-            onClick={onMoveToList}
-            aria-label="도서 목록으로 이동"
-          >
-            <svg aria-hidden="true" viewBox="0 0 28 24" width="28" height="22">
-              <path d="M4 6h20" />
-              <path d="M4 12h20" />
-              <path d="M4 18h20" />
-            </svg>
-            <span>목록으로</span>
-          </button>
+          <div className="detail-nav-buttons">
+            <button
+              type="button"
+              className="icon-return-button"
+              onClick={onMoveBackToList}
+              aria-label="이전 목록 페이지로 돌아가기"
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M19 12H5" />
+                <path d="m12 19-7-7 7-7" />
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              className="list-return-button"
+              onClick={onMoveToList}
+              aria-label="도서 목록 첫 페이지로 이동"
+            >
+              <svg aria-hidden="true" viewBox="0 0 28 24" width="28" height="22">
+                <path d="M4 6h20" />
+                <path d="M4 12h20" />
+                <path d="M4 18h20" />
+              </svg>
+              <span>목록으로</span>
+            </button>
+          </div>
 
           <div
-            className="detail-cover"
+            className={`detail-cover ${hasCoverImage ? "has-image" : ""}`}
             onClick={() => {
-              if (book.coverImageUrl) {
+              if (hasCoverImage) {
                 setIsCoverOpen(true);
               }
             }}
-            style={{ cursor: book.coverImageUrl ? "pointer" : "default" }}
+            style={{ cursor: hasCoverImage ? "pointer" : "default" }}
           >
-            {book.coverImageUrl ? (
-              <img src={book.coverImageUrl} alt={`${book.title} 표지`} />
+            {hasCoverImage ? (
+              <>
+                <img
+                  className="cover-blur-bg"
+                  src={book.coverImageUrl}
+                  alt=""
+                  aria-hidden="true"
+                />
+                <img
+                  className="cover-main-image"
+                  src={book.coverImageUrl}
+                  alt={`${book.title} 표지`}
+                />
+              </>
             ) : (
               <>
                 <span>BOOK</span>

@@ -1,9 +1,23 @@
 function BookCard({ book, onClick }) {
+  const hasCoverImage = Boolean(book.coverImageUrl);
+
   return (
     <button type="button" className="book-card" onClick={onClick}>
-      <div className="book-cover">
-        {book.coverImageUrl ? (
-          <img src={book.coverImageUrl} alt={`${book.title} 표지`} />
+      <div className={`book-cover ${hasCoverImage ? "has-image" : ""}`}>
+        {hasCoverImage ? (
+          <>
+            <img
+              className="cover-blur-bg"
+              src={book.coverImageUrl}
+              alt=""
+              aria-hidden="true"
+            />
+            <img
+              className="cover-main-image"
+              src={book.coverImageUrl}
+              alt={`${book.title} 표지`}
+            />
+          </>
         ) : (
           <>
             <span>BOOK</span>

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Header from "../components/Header";
 import BookCard from "../components/BookCard";
 
@@ -8,12 +8,13 @@ function BookList({
   books,
   search,
   onSearch,
+  currentPage,
+  onPageChange,
   onMoveToStart,
   onMoveToList,
   onMoveToDetail,
   onMoveToCreate,
 }) {
-  const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.max(1, Math.ceil(books.length / BOOKS_PER_PAGE));
   const safeCurrentPage = Math.min(currentPage, totalPages);
 
@@ -24,7 +25,7 @@ function BookList({
   }, [books, safeCurrentPage]);
 
   const handleSearchChange = (value) => {
-    setCurrentPage(1);
+    onPageChange(1);
     onSearch(value);
   };
 
@@ -97,7 +98,7 @@ function BookList({
                         key={pageNumber}
                         type="button"
                         className={pageNumber === safeCurrentPage ? "is-active" : ""}
-                        onClick={() => setCurrentPage(pageNumber)}
+                        onClick={() => onPageChange(pageNumber)}
                         aria-current={pageNumber === safeCurrentPage ? "page" : undefined}
                       >
                         {pageNumber}
