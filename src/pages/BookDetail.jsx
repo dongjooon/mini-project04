@@ -6,11 +6,14 @@ function BookDetail({
   book,
   onMoveToStart,
   onMoveToList,
+  onMoveBackToList,
   onMoveToUpdate,
   onMoveToCoverUpdate,
   onDelete,
 }) {
   const [isCoverOpen, setIsCoverOpen] = useState(false);
+  const hasCoverImage = Boolean(book?.coverImageUrl);
+  const tagList = book.tags ? book.tags.split(" ") : [];
 
   if (!book) {
     return (
@@ -29,31 +32,57 @@ function BookDetail({
 
       <main className="detail-page">
         <section className="detail-container">
-          <button
-            type="button"
-            className="list-return-button detail-return-button"
-            onClick={onMoveToList}
-            aria-label="도서 목록으로 이동"
-          >
-            <svg aria-hidden="true" viewBox="0 0 28 24" width="28" height="22">
-              <path d="M4 6h20" />
-              <path d="M4 12h20" />
-              <path d="M4 18h20" />
-            </svg>
-            <span>목록으로</span>
-          </button>
+          <div className="detail-nav-buttons">
+            <button
+              type="button"
+              className="icon-return-button"
+              onClick={onMoveBackToList}
+              aria-label="이전 목록 페이지로 돌아가기"
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M19 12H5" />
+                <path d="m12 19-7-7 7-7" />
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              className="list-return-button"
+              onClick={onMoveToList}
+              aria-label="도서 목록 첫 페이지로 이동"
+            >
+              <svg aria-hidden="true" viewBox="0 0 28 24" width="28" height="22">
+                <path d="M4 6h20" />
+                <path d="M4 12h20" />
+                <path d="M4 18h20" />
+              </svg>
+              <span>목록으로</span>
+            </button>
+          </div>
 
           <div
-            className="detail-cover"
+            className={`detail-cover ${hasCoverImage ? "has-image" : ""}`}
             onClick={() => {
-              if (book.coverImageUrl) {
+              if (hasCoverImage) {
                 setIsCoverOpen(true);
               }
             }}
-            style={{ cursor: book.coverImageUrl ? "pointer" : "default" }}
+            style={{ cursor: hasCoverImage ? "pointer" : "default" }}
           >
-            {book.coverImageUrl ? (
-              <img src={book.coverImageUrl} alt={`${book.title} 표지`} />
+            {hasCoverImage ? (
+              <>
+                <img
+                  className="cover-blur-bg"
+                  src={book.coverImageUrl}
+                  alt=""
+                  aria-hidden="true"
+                />
+                <img
+                  className="cover-main-image"
+                  src={book.coverImageUrl}
+                  alt={`${book.title} 표지`}
+                />
+              </>
             ) : (
               <>
                 <span>BOOK</span>
@@ -66,6 +95,19 @@ function BookDetail({
           <div className="detail-info">
             <span className="tag">상세 조회</span>
             <h2>{book.title}</h2>
+            {tagList.length > 0 && (
+              <div className="tag-list" style={{ display: "flex", gap: "8px", marginBottom: "16px", flexWrap: "wrap" }}>
+                {tagList.map((tag, index) => {
+                  // 연속된 공백 등으로 인한 빈 태그 방지
+                  if (!tag.trim()) return null;
+                  return (
+                    <span key={index} className="tag">
+                      {tag}
+                    </span>
+                  );
+                })}
+              </div>
+            )}
             <p>저자: {book.author}</p>
             {book.publisher && <p>출판사: {book.publisher}</p>}
 
