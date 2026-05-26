@@ -47,6 +47,19 @@ function App() {
       .slice(0, 4);
   }, [books]);
 
+  const popularBooks = useMemo(() => {
+    return [...books]
+      .sort((a, b) => {
+        const likeA = a.likeCount || 0;
+        const likeB = b.likeCount || 0;
+        if (likeA !== likeB) {
+          return likeB - likeA;
+        }
+        return b.id - a.id;
+      })
+      .slice(0, 4);
+  }, [books]);
+
   const loadBooks = useCallback(async () => {
     try {
       const res = await fetch(API_URL);
@@ -323,6 +336,7 @@ function App() {
         <BookList
           books={filteredBooks}
           newBooks={newBooks}
+          popularBooks={popularBooks}
           search={search}
           onSearch={setSearch}
           onMoveToStart={moveToList}
