@@ -7,12 +7,14 @@ function BookUpdate({
   onMoveToStart,
   onMoveToDetail,
   onUpdate,
+  onExtractTags,
 }) {
   const [formData, setFormData] = useState({
     title: book?.title || "",
     author: book?.author || "",
     publisher: book?.publisher || "",
     content: book?.content || "",
+    tags: book.tags || "",
   });
 
   if (!book) {
@@ -66,6 +68,7 @@ function BookUpdate({
             onCancel={() => onMoveToDetail(book)}
             submitText="수정하기"
             cancelClassName="danger-button"
+            onExtractTags={onExtractTags}
           />
         </section>
       </main>

@@ -25,12 +25,26 @@ function App() {
 
     if (!keyword) return books;
 
+    if (keyword.startsWith("#")) {
+      const searchTag = keyword.replace(/^#/, "").trim(); // 검색어에서 맨 앞 '#' 제거 (예: "#소설" -> "소설")
+
+      if (!searchTag) return books;
+
+      return books.filter((book) => {
+        if (!book.tags) return false;
+
+        const tagArray = book.tags.toLowerCase().replace(/#/g, "").split(" ");
+        return tagArray.some((tag) => tag.includes(searchTag));
+      });
+    }
+
     return books.filter((book) => {
       return (
         book.title.toLowerCase().includes(keyword) ||
         book.author.toLowerCase().includes(keyword) ||
         book.publisher.toLowerCase().includes(keyword) ||
-        book.content.toLowerCase().includes(keyword)
+        book.content.toLowerCase().includes(keyword) ||
+        book.tags?.toLowerCase().includes(keyword)
       );
     });
   }, [books, search]);
@@ -188,11 +202,11 @@ function App() {
     }
   };
 
- const handleGenerateCover = async ({ book, apiKey, model, quality }) => {
-  const OPENAI_IMAGE_API_URL =
-    "https://api.openai.com/v1/images/generations";
+  const handleGenerateCover = async ({ book, apiKey, model, quality }) => {
+    const OPENAI_IMAGE_API_URL =
+      "https://api.openai.com/v1/images/generations";
 
-  const prompt = `
+    const prompt = `
     다음 도서에 어울리는 책 표지 이미지를 생성해주세요.
 
     도서 제목: ${book.title}
@@ -208,70 +222,101 @@ function App() {
     - 글자는 너무 많이 넣지 않기
 `;
 
-  try {
-    setMessage("");
+    try {
+      setMessage("");
 
-    const res = await fetch(OPENAI_IMAGE_API_URL, {
+      const res = await fetch(OPENAI_IMAGE_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: model,
+          prompt: prompt,
+          n: 1,
+          size: "1024x1536",
+          quality: quality,
+          output_format: "png",
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error?.message || "OpenAI 요청 실패");
+      }
+
+      const b64Json = data.data?.[0]?.b64_json;
+
+      if (!b64Json) {
+        throw new Error("이미지 데이터가 응답에 없습니다.");
+      }
+
+      const imageSrc = `data:image/png;base64,${b64Json}`;
+
+      const patchRes = await fetch(`${API_URL}/${book.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          coverImageUrl: imageSrc,
+          updatedAt: new Date().toISOString().slice(0, 10),
+        }),
+      });
+
+      if (!patchRes.ok) {
+        throw new Error("표지 저장 실패");
+      }
+
+      const savedBook = await patchRes.json();
+
+      setBooks((prevBooks) =>
+        prevBooks.map((item) => (item.id === savedBook.id ? savedBook : item))
+      );
+
+      setSelectedId(savedBook.id);
+      setMessage("");
+      return savedBook;
+    } catch (error) {
+      console.error(error);
+      setMessage(error.message || "표지 생성 중 오류가 발생했습니다.");
+      alert(error.message || "표지 생성 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleExtractTags = async (content, apiKey) => {
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: model,
-        prompt: prompt,
-        n: 1,
-        size: "1024x1536",
-        quality: quality,
-        output_format: "png",
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content: "너는 도서 키워드 추출기야. 내용을 읽고 가장 중요한 키워드 3개를 #태그 형식의 JSON 배열로만 답해. 예: [\"#로맨스\", \"#성장\", \"#현대물\"]"
+          },
+          { role: "user", content: content }
+        ],
+        temperature: 0.5,
       }),
     });
 
-    const data = await res.json();
+    const data = await response.json();
 
-    if (!res.ok) {
-      throw new Error(data.error?.message || "OpenAI 요청 실패");
+    if (!response.ok) {
+      throw new Error(data.error?.message || "태그 추출 실패");
     }
 
-    const b64Json = data.data?.[0]?.b64_json;
+    const tagsArray = JSON.parse(data.choices[0].message.content.trim());
+    return tagsArray.join(" "); // 결과물인 "#태그1 #태그2" 문자열만 반환
+  };
 
-    if (!b64Json) {
-      throw new Error("이미지 데이터가 응답에 없습니다.");
-    }
-
-    const imageSrc = `data:image/png;base64,${b64Json}`;
-
-    const patchRes = await fetch(`${API_URL}/${book.id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        coverImageUrl: imageSrc,
-        updatedAt: new Date().toISOString().slice(0, 10),
-      }),
-    });
-
-    if (!patchRes.ok) {
-      throw new Error("표지 저장 실패");
-    }
-
-    const savedBook = await patchRes.json();
-
-    setBooks((prevBooks) =>
-      prevBooks.map((item) => (item.id === savedBook.id ? savedBook : item))
-    );
-
-    setSelectedId(savedBook.id);
-    setMessage("");
-    return savedBook;
-  } catch (error) {
-    console.error(error);
-    setMessage(error.message || "표지 생성 중 오류가 발생했습니다.");
-    alert(error.message || "표지 생성 중 오류가 발생했습니다.");
-  }
-};
-  
 
   return (
     <div className="app">
@@ -308,6 +353,7 @@ function App() {
           onMoveToStart={moveToList}
           onMoveToList={moveToList}
           onCreate={handleCreateBook}
+          onExtractTags={handleExtractTags}
         />
       )}
 
@@ -317,6 +363,7 @@ function App() {
           onMoveToStart={moveToList}
           onMoveToDetail={moveToDetail}
           onUpdate={handleUpdateBook}
+          onExtractTags={handleExtractTags}
         />
       )}
 

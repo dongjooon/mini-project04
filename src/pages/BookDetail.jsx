@@ -13,6 +13,7 @@ function BookDetail({
 }) {
   const [isCoverOpen, setIsCoverOpen] = useState(false);
   const hasCoverImage = Boolean(book?.coverImageUrl);
+  const tagList = book.tags ? book.tags.split(" ") : [];
 
   if (!book) {
     return (
@@ -94,6 +95,19 @@ function BookDetail({
           <div className="detail-info">
             <span className="tag">상세 조회</span>
             <h2>{book.title}</h2>
+            {tagList.length > 0 && (
+              <div className="tag-list" style={{ display: "flex", gap: "8px", marginBottom: "16px", flexWrap: "wrap" }}>
+                {tagList.map((tag, index) => {
+                  // 연속된 공백 등으로 인한 빈 태그 방지
+                  if (!tag.trim()) return null;
+                  return (
+                    <span key={index} className="tag">
+                      {tag}
+                    </span>
+                  );
+                })}
+              </div>
+            )}
             <p>저자: {book.author}</p>
             {book.publisher && <p>출판사: {book.publisher}</p>}
 

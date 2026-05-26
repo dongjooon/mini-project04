@@ -2,12 +2,13 @@ import { useState } from "react";
 import Header from "../components/Header";
 import BookForm from "../components/BookForm";
 
-function BookCreate({ onMoveToStart, onMoveToList, onCreate }) {
+function BookCreate({ onMoveToStart, onMoveToList, onCreate, onExtractTags }) {
   const [formData, setFormData] = useState({
     title: "",
     author: "",
     publisher: "",
     content: "",
+    tags: "",
   });
 
   const handleChange = (e) => {
@@ -45,6 +46,7 @@ function BookCreate({ onMoveToStart, onMoveToList, onCreate }) {
             onChange={handleChange}
             onSubmit={handleSubmit}
             onCancel={onMoveToList}
+            onExtractTags={onExtractTags}
             submitText="등록하기"
           />
         </section>
