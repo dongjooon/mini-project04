@@ -337,6 +337,9 @@ function App() {
           onMoveToList={moveToList}
           onMoveToDetail={moveToDetail}
           onMoveToCreate={moveToCreate}
+          onMoveToAllBooks={() => {
+            alert("전체 도서 페이지는 다른 팀원이 개발 중입니다.");
+          }}
         />
       )}
 
