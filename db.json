@@ -2,33 +2,33 @@
   "books": [
     {
       "id": 1,
-      "title": "예시1",
-      "author": "저자1",
-      "publisher": "출판사1",
-      "content": "내용1",
-      "imageUrl": "",
-      "created": "2026-05-22",
-      "updated": "2026-05-22"
+      "title": "별을 건너는 개발자",
+      "author": "김하린",
+      "publisher": "걷기가 출판",
+      "content": "우주 정거장에서 코드를 작성하는 개발자가 잃어버린 기억과 데이터를 찾아가는 이야기입니다.",
+      "coverImageUrl": "",
+      "createdAt": "2026-05-22",
+      "updatedAt": "2026-05-22"
     },
     {
       "id": 2,
-      "title": "예시2",
-      "author": "저자2",
-      "publisher": "출판사2",
-      "content": "내용2",
-      "imageUrl": "",
-      "created": "2026-05-22",
-      "updated": "2026-05-22"
+      "title": "커피가 식기 전에 배포하기",
+      "author": "박지훈",
+      "publisher": "새벽문고",
+      "content": "작은 스타트업에서 밤새 서비스를 배포하며 성장하는 개발자의 기록입니다.",
+      "coverImageUrl": "",
+      "createdAt": "2026-05-22",
+      "updatedAt": "2026-05-22"
     },
     {
       "id": 3,
-      "title": "예시3",
-      "author": "저자3",
-      "publisher": "출판사3",
-      "content": "내용3",
-      "imageUrl": "",
-      "created": "2026-05-22",
-      "updated": "2026-05-22"
+      "title": "도시의 기억 보관소",
+      "author": "이서윤",
+      "publisher": "북스테이션",
+      "content": "사라진 사람들의 기억이 보관되는 도서관에서 벌어지는 추적극입니다.",
+      "coverImageUrl": "",
+      "createdAt": "2026-05-22",
+      "updatedAt": "2026-05-22"
     }
   ]
 }

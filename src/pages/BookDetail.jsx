@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import BookUpdate from "./BookUpdate";
 
-function BookDetail({ book, onMoveToList, onMoveToUpdate, onMoveToCoverUpdate, onBookDelete, onBookUpdate }) {
+function BookDetail({ book, onMoveToStart, onMoveToList, onMoveToUpdate, onMoveToCoverUpdate, onBookDelete, onBookUpdate }) {
 
   const handleDelete = (id) => {
     if (!window.confirm(`${book.title}을(를) 정말 삭제하시겠습니까?`)) {
@@ -21,37 +21,65 @@ function BookDetail({ book, onMoveToList, onMoveToUpdate, onMoveToCoverUpdate, o
 
   if (!book) {
     return (
-      <div>
-        <Header />
+      <>
+        <Header
+          onMoveToStart={onMoveToStart}
+        />
         <main className="detail-page">
           <p>선택된 도서가 없습니다.</p>
-          <button onClick={onMoveToList}>목록으로 돌아가기</button>
         </main>
-      </div>
+      </>
     );
   }
 
   return (
-    <div>
-      <Header />
+    <>
+      <Header
+        onMoveToStart={onMoveToStart}
+      />
 
       <main className="detail-page">
-        <h2>상세 조회</h2>
-
         <section className="detail-container">
+          <button
+            type="button"
+            className="list-return-button detail-return-button"
+            onClick={onMoveToList}
+            aria-label="도서 목록으로 이동"
+          >
+            <svg aria-hidden="true" viewBox="0 0 28 24" width="28" height="22">
+              <path d="M4 6h20" />
+              <path d="M4 12h20" />
+              <path d="M4 18h20" />
+            </svg>
+            <span>목록으로</span>
+          </button>
+
           <div className="detail-cover">
             {book.coverImageUrl ? (
               <img src={book.coverImageUrl} alt={`${book.title} 표지`} />
             ) : (
-              <span>표지 이미지</span>
+              <>
+                <span>BOOK</span>
+                <strong>{book.title}</strong>
+                <em>{book.author}</em>
+              </>
             )}
           </div>
 
           <div className="detail-info">
-            <h3>{book.title}</h3>
+            <span className="tag">상세 조회</span>
+            <h2>{book.title}</h2>
             <p>저자: {book.author}</p>
-            <p>출판사: {book.publisher}</p>
-            <p className="detail-content">{book.content}</p>
+            {book.publisher && <p>출판사: {book.publisher}</p>}
+
+            <div className="content-box">
+              <strong>도서 소개</strong>
+              <p>{book.content}</p>
+            </div>
+
+            <p className="date-text">
+              등록일: {book.createdAt} / 수정일: {book.updatedAt}
+            </p>
 
             <div className="detail-buttons">
               <button onClick={() => onMoveToCoverUpdate(book)}>표지 시안 생성</button>
@@ -62,7 +90,7 @@ function BookDetail({ book, onMoveToList, onMoveToUpdate, onMoveToCoverUpdate, o
           </div>
         </section>
       </main>
-    </div>
+    </>
   );
 }
 

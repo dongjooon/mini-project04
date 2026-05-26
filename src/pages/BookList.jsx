@@ -1,11 +1,13 @@
 import Header from "../components/Header";
 import BookCard from "../components/BookCard";
-import { mockBooks } from "../data/mockBooks";
 
-function BookList({ books, onMoveToDetail, onMoveToCreate }) {
+function BookList({ books, onMoveToDetail, onMoveToCreate, onMoveToStart }) {
   return (
-    <div>
-      <Header />
+    <>
+      <Header
+        onMoveToStart={onMoveToStart}
+        onMoveToList={onMoveToStart}
+      />
 
       <main className="book-list-page">
         <div className="page-title-row">
@@ -16,11 +18,11 @@ function BookList({ books, onMoveToDetail, onMoveToCreate }) {
               <input type="text" placeholder="제목을 입력해주세요." />
               <button>검색</button>
             </div>
-
-            <button className="create-button" onClick={onMoveToCreate}>
-              신규 도서 등록
-            </button>
           </div>
+
+          <button className="create-button" onClick={onMoveToCreate}>
+            신규 도서 등록
+          </button>
         </div>
 
         <section className="book-grid">
@@ -33,7 +35,7 @@ function BookList({ books, onMoveToDetail, onMoveToCreate }) {
           ))}
         </section>
       </main>
-    </div>
+    </>
   );
 }
 

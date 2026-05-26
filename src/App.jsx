@@ -1,38 +1,90 @@
-import { useState } from "react";
-import { useEffect } from "react";
-import StartPage from "./pages/StartPage";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import BookList from "./pages/BookList";
 import BookDetail from "./pages/BookDetail";
 import BookCreate from "./pages/BookCreate";
 import BookUpdate from "./pages/BookUpdate";
 import CoverUpdate from "./pages/CoverUpdate";
-import './App.css'
+
+const API_URL = "http://localhost:3000/books";
 
 function App() {
-  const [page, setPage] = useState("start");
+  const [page, setPage] = useState("list");
   const [books, setBooks] = useState([]);
-  const [selectedBook, setSelectedBook] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
+  const [search, setSearch] = useState("");
+  const [message, setMessage] = useState("");
+
+  const selectedBook = useMemo(
+    () => books.find((book) => book.id === selectedId) || null,
+    [books, selectedId]
+  );
+
+  const filteredBooks = useMemo(() => {
+    const keyword = search.trim().toLowerCase();
+
+    if (!keyword) return books;
+
+    return books.filter((book) => {
+      return (
+        book.title.toLowerCase().includes(keyword) ||
+        book.author.toLowerCase().includes(keyword) ||
+        book.publisher.toLowerCase().includes(keyword) ||
+        book.content.toLowerCase().includes(keyword)
+      );
+    });
+  }, [books, search]);
+
+  const loadBooks = useCallback(async () => {
+    try {
+      const res = await fetch(API_URL);
+
+      if (!res.ok) {
+        throw new Error("도서 목록을 불러오지 못했습니다.");
+      }
+
+      const data = await res.json();
+
+      setBooks(data);
+      setSelectedId((prevId) => prevId ?? data[0]?.id ?? null);
+    } catch (error) {
+      console.error(error);
+      setMessage("json-server 실행 여부를 확인해주세요.");
+    }
+  }, []);
+
+  useEffect(() => {
+    const timerId = window.setTimeout(() => {
+      loadBooks();
+    }, 0);
+
+    return () => window.clearTimeout(timerId);
+  }, [loadBooks]);
 
   const moveToList = () => {
+    setMessage("");
     setPage("list");
   };
 
   const moveToCreate = () => {
+    setMessage("");
     setPage("create");
   };
 
   const moveToDetail = (book) => {
-    setSelectedBook(book);
+    setSelectedId(book.id);
+    setMessage("");
     setPage("detail");
   };
 
   const moveToUpdate = (book) => {
-    setSelectedBook(book);
+    setSelectedId(book.id);
+    setMessage("");
     setPage("update");
   };
 
   const moveToCoverUpdate = (book) => {
-    setSelectedBook(book);
+    setSelectedId(book.id);
+    setMessage("");
     setPage("coverUpdate");
   };
 
@@ -96,17 +148,13 @@ function App() {
   };
 
   return (
-    <>
-      {page === "start" && (
-        <StartPage
-          onMoveToList={moveToList}
-          onMoveToCreate={moveToCreate}
-        />
-      )}
+    <div className="app">
+      {message && <div className="message">{message}</div>}
 
       {page === "list" && (
         <BookList
           books={books}
+          onMoveToStart={moveToList}
           onMoveToDetail={moveToDetail}
           onMoveToCreate={moveToCreate}
         />
@@ -115,6 +163,7 @@ function App() {
       {page === "detail" && (
         <BookDetail
           book={selectedBook}
+          onMoveToStart={moveToList}
           onMoveToList={moveToList}
           onMoveToUpdate={moveToUpdate}
           onMoveToCoverUpdate={moveToCoverUpdate}
@@ -123,25 +172,27 @@ function App() {
         />
       )}
 
-      {page === "create" && <BookCreate onAddBook={handleAddBook} onMoveToList={moveToList} />}
+      {page === "create" && <BookCreate onMoveToStart={moveToList} onAddBook={handleAddBook} onMoveToList={moveToList} />}
 
       {page === "update" && (
         <BookUpdate
           book={selectedBook}
+          onMoveToStart={moveToList}
           onBookUpdate={handleBookUpdate}
           onMoveToDetail={moveToDetail}
-          onMoveToList={moveToList}
+          onUpdate={handleBookUpdate}
         />
       )}
 
       {page === "coverUpdate" && (
         <CoverUpdate
           book={selectedBook}
+          onMoveToStart={moveToList}
           onMoveToDetail={moveToDetail}
-          onMoveToList={moveToList}
+          onGenerateCover={handleGenerateCover}
         />
       )}
-    </>
+    </div>
   );
 }
 
