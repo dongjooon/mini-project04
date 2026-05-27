@@ -1,0 +1,38 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f4f7fb;
+  color: #1f2937;
+  font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+}
+
+button {
+  font-family: inherit;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.page-button {
+  padding: 11px 18px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.gray-button {
+  background: #6b7280;
+}
+
+.danger-button {
+  background: #dc2626;
+}
