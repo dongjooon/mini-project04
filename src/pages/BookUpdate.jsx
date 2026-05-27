@@ -1,14 +1,7 @@
 import { useState } from "react";
-import Header from "../components/Header";
 import BookForm from "../components/BookForm";
 
-function BookUpdate({
-  book,
-  onMoveToStart,
-  onMoveToDetail,
-  onUpdate,
-  onExtractTags,
-}) {
+function BookUpdate({ book, onMoveToDetail, onUpdate, onExtractTags }) {
   const [formData, setFormData] = useState({
     title: book?.title || "",
     author: book?.author || "",
@@ -20,10 +13,6 @@ function BookUpdate({
   if (!book) {
     return (
       <>
-        <Header
-          onMoveToStart={onMoveToStart}
-        />
-
         <main className="form-page">
           <p>수정할 도서 정보가 없습니다.</p>
         </main>
@@ -53,10 +42,6 @@ function BookUpdate({
 
   return (
     <>
-      <Header
-        onMoveToStart={onMoveToStart}
-      />
-
       <main className="form-page">
         <section className="section-card form-card">
           <h2>등록된 도서 수정</h2>

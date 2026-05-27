@@ -1,8 +1,7 @@
 import { useState } from "react";
-import Header from "../components/Header";
 import BookForm from "../components/BookForm";
 
-function BookCreate({ onMoveToStart, onMoveToList, onCreate, onExtractTags }) {
+function BookCreate({ onMoveToList, onCreate, onExtractTags }) {
   const [formData, setFormData] = useState({
     title: "",
     author: "",
@@ -33,8 +32,6 @@ function BookCreate({ onMoveToStart, onMoveToList, onCreate, onExtractTags }) {
 
   return (
     <>
-      <Header onMoveToStart={onMoveToStart} />
-
       <main className="form-page">
         <section className="section-card form-card">
           <h2>새 도서 등록</h2>

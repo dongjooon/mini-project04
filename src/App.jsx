@@ -5,6 +5,7 @@ import BookCreate from "./pages/BookCreate";
 import BookUpdate from "./pages/BookUpdate";
 import CoverUpdate from "./pages/CoverUpdate";
 import StartPage from "./pages/StartPage";
+import Header from "./components/Header";
 const API_URL = "http://localhost:3000/books";
 
 function App() {
@@ -157,7 +158,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (books.length > 0 && !aiRecommendation) {
+    if (books.length > 0) {
       fetchAIRecommendation(books).then((result) => {
         if (result) {
           const recommendedBook = books.find(
@@ -167,11 +168,10 @@ function App() {
             ...recommendedBook,
             reason: result.reason,
           });
-          console.log(aiRecommendation);
         }
       });
     }
-  }, [books, aiRecommendation]);
+  }, [books]);
 
   useEffect(() => {
     const timerId = window.setTimeout(() => {
@@ -385,7 +385,7 @@ function App() {
     - 도서 내용과 어울리는 이미지 중심 디자인
     - 실제 서점에 있을 법한 표지 느낌
     - 글자는 너무 많이 넣지 않기
-`;
+    `;
 
     try {
       setMessage("");
@@ -438,7 +438,7 @@ function App() {
       const savedBook = await patchRes.json();
 
       setBooks((prevBooks) =>
-        prevBooks.map((item) => (item.id === savedBook.id ? savedBook : item))
+        prevBooks.map((item) => (item.id === savedBook.id ? savedBook : item)),
       );
 
       setSelectedId(savedBook.id);
@@ -471,7 +471,7 @@ function App() {
       const savedBook = await res.json();
 
       setBooks((prevBooks) =>
-        prevBooks.map((item) => (item.id === savedBook.id ? savedBook : item))
+        prevBooks.map((item) => (item.id === savedBook.id ? savedBook : item)),
       );
 
       setSelectedId(savedBook.id);
@@ -485,7 +485,6 @@ function App() {
   };
 
   const handleExtractTags = async (content, apiKey) => {
-
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -497,9 +496,10 @@ function App() {
         messages: [
           {
             role: "system",
-            content: "너는 도서 키워드 추출기야. 내용을 읽고 가장 중요한 키워드 3개를 #태그 형식의 JSON 배열로만 답해. 예: [\"#로맨스\", \"#성장\", \"#현대물\"]"
+            content:
+              '너는 도서 키워드 추출기야. 내용을 읽고 가장 중요한 키워드 3개를 #태그 형식의 JSON 배열로만 답해. 예: ["#로맨스", "#성장", "#현대물"]',
           },
-          { role: "user", content: content }
+          { role: "user", content: content },
         ],
         temperature: 0.5,
       }),
@@ -515,49 +515,42 @@ function App() {
     return tagsArray.join(" "); // 결과물인 "#태그1 #태그2" 문자열만 반환
   };
 
-
   return (
     <div className="app">
       {message && <div className="message">{message}</div>}
-
+      <Header
+        onMoveToStart={moveToStart}
+        aiRecommendation={aiRecommendation}
+        page={page}
+      />
       {page === "start" && (
         <StartPage
           books={filteredBooks}
           newBooks={newBooks}
           popularBooks={popularBooks}
-          onMoveToStart={moveToStart}
           onMoveToList={moveToList}
           onMoveToDetail={moveToDetail}
           onMoveToCreate={moveToCreate}
-          aiRecommendation={aiRecommendation}
         />
       )}
 
       {page === "list" && (
         <BookList
           books={filteredBooks}
-          newBooks={newBooks}
-          popularBooks={popularBooks}
           search={search}
           onSearch={setSearch}
           type={type}
           onType={setType}
           currentPage={listPage}
           onPageChange={setListPage}
-          onMoveToStart={moveToStart}
-          onMoveToList={moveToList}
           onMoveToDetail={moveToDetail}
           onMoveToCreate={moveToCreate}
-          onMoveToAllBooks={() => {
-            alert("전체 도서 페이지는 다른 팀원이 개발 중입니다.");
-          }}
         />
       )}
 
       {page === "detail" && (
         <BookDetail
           book={selectedBook}
-          onMoveToStart={moveToStart}
           onMoveToList={moveToList}
           onMoveBackToList={moveBackToList}
           onMoveToUpdate={moveToUpdate}
@@ -569,7 +562,6 @@ function App() {
 
       {page === "create" && (
         <BookCreate
-          onMoveToStart={moveToStart}
           onMoveToList={moveToList}
           onCreate={handleCreateBook}
           onExtractTags={handleExtractTags}
@@ -579,7 +571,6 @@ function App() {
       {page === "update" && (
         <BookUpdate
           book={selectedBook}
-          onMoveToStart={moveToStart}
           onMoveToDetail={moveToDetail}
           onUpdate={handleUpdateBook}
           onExtractTags={handleExtractTags}
@@ -589,7 +580,6 @@ function App() {
       {page === "coverUpdate" && (
         <CoverUpdate
           book={selectedBook}
-          onMoveToStart={moveToList}
           onMoveToDetail={moveToDetail}
           onGenerateCover={handleGenerateCover}
           onSaveCoverImage={handleSaveCoverImage}

@@ -1,10 +1,8 @@
 import { useState } from "react";
-import Header from "../components/Header";
 import CoverImageModal from "../components/CoverImageModal";
 
 function BookDetail({
   book,
-  onMoveToStart,
   onMoveToList,
   onMoveBackToList,
   onMoveToUpdate,
@@ -19,7 +17,6 @@ function BookDetail({
   if (!book) {
     return (
       <>
-        <Header onMoveToStart={onMoveToStart} />
         <main className="detail-page">
           <p>선택된 도서가 없습니다.</p>
         </main>
@@ -29,8 +26,6 @@ function BookDetail({
 
   return (
     <>
-      <Header onMoveToStart={onMoveToStart} />
-
       <main className="detail-page">
         <section className="detail-container">
           <div className="detail-nav-buttons">
@@ -40,7 +35,12 @@ function BookDetail({
               onClick={onMoveBackToList}
               aria-label="이전 목록 페이지로 돌아가기"
             >
-              <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24">
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+              >
                 <path d="M19 12H5" />
                 <path d="m12 19-7-7 7-7" />
               </svg>
@@ -52,7 +52,12 @@ function BookDetail({
               onClick={onMoveToList}
               aria-label="도서 목록 첫 페이지로 이동"
             >
-              <svg aria-hidden="true" viewBox="0 0 28 24" width="28" height="22">
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 28 24"
+                width="28"
+                height="22"
+              >
                 <path d="M4 6h20" />
                 <path d="M4 12h20" />
                 <path d="M4 18h20" />
@@ -97,7 +102,15 @@ function BookDetail({
             <span className="tag">상세 조회</span>
             <h2>{book.title}</h2>
             {tagList.length > 0 && (
-              <div className="tag-list" style={{ display: "flex", gap: "8px", marginBottom: "16px", flexWrap: "wrap" }}>
+              <div
+                className="tag-list"
+                style={{
+                  display: "flex",
+                  gap: "8px",
+                  marginBottom: "16px",
+                  flexWrap: "wrap",
+                }}
+              >
                 {tagList.map((tag, index) => {
                   // 연속된 공백 등으로 인한 빈 태그 방지
                   if (!tag.trim()) return null;
@@ -132,7 +145,12 @@ function BookDetail({
                 onClick={() => onLikeBook(book)}
                 aria-label={`${book.title} 도서 추천하기`}
               >
-                <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                >
                   <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
                   <path d="M7 11 11 2a3 3 0 0 1 3 3v4h4.4a2.6 2.6 0 0 1 2.5 3.2l-1.7 6.8A4 4 0 0 1 15.3 22H7V11Z" />
                 </svg>
@@ -142,7 +160,12 @@ function BookDetail({
 
             <div className="detail-buttons">
               <button type="button" onClick={() => onMoveToCoverUpdate(book)}>
-                <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                >
                   <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" />
                   <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8.92 4a1.65 1.65 0 0 0 1-1.51V2a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 3.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.14.45.48.83.91 1H21a2 2 0 0 1 0 4h-.09c-.43.17-.77.55-.91 1Z" />
                 </svg>

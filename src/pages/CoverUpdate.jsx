@@ -1,17 +1,15 @@
 import { useState } from "react";
-import Header from "../components/Header";
 import CoverPreview from "../components/CoverPreview";
 import CoverImageModal from "../components/CoverImageModal";
 
 function CoverUpdate({
   book,
-  onMoveToStart,
   onMoveToDetail,
   onGenerateCover,
   onSaveCoverImage,
 }) {
   const [apiKey, setApiKey] = useState("");
-  const [model, setModel] = useState("gpt-Image-2.0");
+  const [model, setModel] = useState("gpt-image-2");
   const [quality, setQuality] = useState("medium");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isCoverOpen, setIsCoverOpen] = useState(false);
@@ -20,10 +18,6 @@ function CoverUpdate({
   if (!book) {
     return (
       <>
-        <Header
-          onMoveToStart={onMoveToStart}
-        />
-
         <main className="cover-page">
           <p>표지를 생성할 도서 정보가 없습니다.</p>
         </main>
@@ -78,7 +72,9 @@ function CoverUpdate({
   };
 
   const handleDeleteCoverImage = async () => {
-    const isConfirm = window.confirm("생성된 표지를 삭제하고 기본 이미지로 되돌릴까요?");
+    const isConfirm = window.confirm(
+      "생성된 표지를 삭제하고 기본 이미지로 되돌릴까요?",
+    );
 
     if (!isConfirm) return;
 
@@ -87,10 +83,6 @@ function CoverUpdate({
 
   return (
     <>
-      <Header
-        onMoveToStart={onMoveToStart}
-      />
-
       <main className="cover-page">
         <section className="cover-layout">
           <div className="section-card cover-form-area">
@@ -114,8 +106,8 @@ function CoverUpdate({
                 onChange={(e) => setModel(e.target.value)}
                 disabled={isGenerating}
               >
-                <option value="gpt-Image-2.0">gpt-Image-2.0</option>
-                <option value="gpt-Image-1.5">gpt-Image-1.5</option>
+                <option value="gpt-image-2">gpt-Image-2.0</option>
+                <option value="gpt-image-1.5">gpt-Image-1.5</option>
               </select>
             </div>
 
