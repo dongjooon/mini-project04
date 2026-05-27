@@ -8,7 +8,8 @@
       "content": "우주 정거장에서 코드를 작성하는 개발자가 잃어버린 기억과 데이터를 찾아가는 이야기입니다.",
       "coverImageUrl": "",
       "createdAt": "2026-05-22",
-      "updatedAt": "2026-05-22"
+      "updatedAt": "2026-05-22",
+      "likeCount": 45
     },
     {
       "id": 2,
@@ -38,7 +39,8 @@
       "content": "도서 입고부터 대출 현황까지 관리자가 알아야 할 운영 흐름을 정리한 실무 안내서입니다.",
       "coverImageUrl": "",
       "createdAt": "2026-05-22",
-      "updatedAt": "2026-05-22"
+      "updatedAt": "2026-05-22",
+      "likeCount": 8
     },
     {
       "id": 5,
@@ -179,6 +181,120 @@
       "coverImageUrl": "",
       "createdAt": "2026-05-22",
       "updatedAt": "2026-05-22"
+    },
+    {
+      "id": 8,
+      "title": "책등의 지도",
+      "author": "강도윤",
+      "publisher": "페이지랩",
+      "content": "서가 위치와 책등 라벨을 바탕으로 누구나 쉽게 책을 찾는 방법을 설명합니다.",
+      "coverImageUrl": "",
+      "createdAt": "2026-05-22",
+      "updatedAt": "2026-05-22",
+      "likeCount": 5
+    },
+    {
+      "id": 9,
+      "title": "반납함이 닫히기 전에",
+      "author": "윤채아",
+      "publisher": "새벽출판",
+      "content": "하루의 마지막 반납 도서를 정리하며 이어지는 작은 사건들을 그린 단편집입니다.",
+      "coverImageUrl": "",
+      "createdAt": "2026-05-22",
+      "updatedAt": "2026-05-22",
+      "likeCount": 25
+    },
+    {
+      "id": 10,
+      "title": "자료실의 계절",
+      "author": "문태오",
+      "publisher": "그린북스",
+      "content": "계절마다 달라지는 이용 패턴과 추천 도서를 관리자의 시선으로 풀어냅니다.",
+      "coverImageUrl": "",
+      "createdAt": "2026-05-22",
+      "updatedAt": "2026-05-22",
+      "likeCount": 6
+    },
+    {
+      "id": 11,
+      "title": "서가 정리의 원칙",
+      "author": "김나연",
+      "publisher": "에이블북스",
+      "content": "장서 점검, 분류, 폐기 기준까지 도서관리의 기본 원칙을 단계별로 담았습니다.",
+      "coverImageUrl": "",
+      "createdAt": "2026-05-22",
+      "updatedAt": "2026-05-22"
+    },
+    {
+      "id": 12,
+      "title": "읽고 싶은 목록",
+      "author": "박유준",
+      "publisher": "북오피스",
+      "content": "이용자의 관심 도서를 기록하고 추천으로 연결하는 목록 관리 노트를 다룹니다.",
+      "coverImageUrl": "",
+      "createdAt": "2026-05-22",
+      "updatedAt": "2026-05-22"
+    },
+    {
+      "id": 13,
+      "title": "도서관 데이터 입문",
+      "author": "이수빈",
+      "publisher": "데이터하우스",
+      "content": "도서 정보, 저자, 출판사, 등록일 데이터를 체계적으로 다루는 기초 입문서입니다.",
+      "coverImageUrl": "",
+      "createdAt": "2026-05-22",
+      "updatedAt": "2026-05-22"
+    },
+    {
+      "id": 14,
+      "title": "표지와 목차 사이",
+      "author": "최현우",
+      "publisher": "프린트라인",
+      "content": "도서 소개 문구와 표지 정보를 함께 관리할 때 필요한 기준을 설명합니다.",
+      "coverImageUrl": "",
+      "createdAt": "2026-05-22",
+      "updatedAt": "2026-05-22"
+    },
+    {
+      "id": 15,
+      "title": "예약된 책의 밤",
+      "author": "장하늘",
+      "publisher": "문학서랍",
+      "content": "예약 도서를 둘러싼 조용한 오해와 화해를 담은 도서관 배경 소설입니다.",
+      "coverImageUrl": "",
+      "createdAt": "2026-05-22",
+      "updatedAt": "2026-05-22"
+    },
+    {
+      "id": 16,
+      "title": "관리자를 위한 검색법",
+      "author": "배서진",
+      "publisher": "쿼리북스",
+      "content": "제목, 저자, 출판사, 소개글을 활용해 원하는 도서를 빠르게 찾는 검색 전략입니다.",
+      "coverImageUrl": "",
+      "createdAt": "2026-05-22",
+      "updatedAt": "2026-05-22"
+    },
+    {
+      "id": 17,
+      "title": "새 책이 들어오는 날",
+      "author": "노아영",
+      "publisher": "봄날문고",
+      "content": "신규 도서 등록부터 이용자에게 공개되기까지의 과정을 따뜻하게 담았습니다.",
+      "coverImageUrl": "",
+      "createdAt": "2026-05-22",
+      "updatedAt": "2026-05-22"
+    },
+    {
+      "id": 18,
+      "title": "열두 권의 체크리스트",
+      "author": "홍지안",
+      "publisher": "시스템북스",
+      "content": "도서관리 시스템을 점검할 때 필요한 항목들을 사례 중심으로 정리한 실무서입니다.",
+      "coverImageUrl": "",
+      "createdAt": "2026-05-22",
+      "updatedAt": "2026-05-22",
+      "likeCount": 4
     }
   ]
 }

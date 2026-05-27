@@ -14,6 +14,7 @@ function App() {
   const [search, setSearch] = useState("");
   const [listPage, setListPage] = useState(1);
   const [message, setMessage] = useState("");
+  const [aiRecommendation, setAiRecommendation] = useState(null);
 
   const selectedBook = useMemo(
     () => books.find((book) => book.id === selectedId) || null,
@@ -92,6 +93,64 @@ function App() {
       setMessage("json-server 실행 여부를 확인해주세요.");
     }
   }, []);
+
+  const fetchAIRecommendation = async (books) => {
+    if (books.length === 0) return;
+    const simplifiedBooks = books.map((book) => ({
+      id: book.id,
+      title: book.title,
+      content: book.content,
+    }));
+    const currentMonth = new Date().getMonth() + 1;
+
+    const prompt = `
+    이번달은 ${currentMonth}달이야
+    다음은 우리 도서관의 책 목록이야:
+    ${JSON.stringify(simplifiedBooks)}
+    
+    이 중에서 이번 ${currentMonth}월의 계절감이나 분위기와 가장 잘 어울리는 추천작을 하나 골라줘.
+    결과는 반드시 아래와 같은 순수 JSON 형태로만 응답해. 백틱(\`\`\`)이나 다른 설명은 절대 넣지 마.
+    {"recommendedId": 숫자, "reason": "추천 이유"}
+    `;
+    try {
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: [{ role: "user", content: prompt }],
+          }),
+        },
+      );
+      const result = await response.json();
+      const aiData = JSON.parse(result.choices[0].message.content);
+      return aiData;
+    } catch (error) {
+      console.error("AI 추천 실패:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (books.length > 0 && !aiRecommendation) {
+      fetchAIRecommendation(books).then((result) => {
+        if (result) {
+          const recommendedBook = books.find(
+            (b) => b.id === result.recommendedId,
+          );
+          setAiRecommendation({
+            ...recommendedBook,
+            reason: result.reason,
+          });
+          console.log(aiRecommendation);
+        }
+      });
+    }
+  }, [books, aiRecommendation]);
 
   useEffect(() => {
     const timerId = window.setTimeout(() => {
@@ -442,6 +501,7 @@ function App() {
           onMoveToList={moveToList}
           onMoveToDetail={moveToDetail}
           onMoveToCreate={moveToCreate}
+          aiRecommendation={aiRecommendation}
         />
       )}
 
