@@ -45,7 +45,6 @@ graph TD
 
     BookDetail -->|수정| BookUpdate[BookUpdate: 도서 수정]
     BookDetail -->|삭제: DELETE /books/:id| BookList
-    BookDetail -->|추천: PATCH /books/:id| BookDetail
     BookDetail -->|AI 표지 생성| CoverUpdate[CoverUpdate: AI 표지 생성]
 
     BookUpdate -->|수정 완료: PATCH /books/:id| BookDetail
