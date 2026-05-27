@@ -192,7 +192,16 @@ function App() {
     return () => window.clearTimeout(timerId);
   }, [message]);
 
-    const handleLikeBook = async (book) => {
+
+
+  const showToast = (text) => {
+    setMessage("");
+    window.setTimeout(() => {
+      setMessage(text);
+    }, 0);
+  };
+
+  const handleLikeBook = async (book) => {
     const currentLikes = book.likeCount || 0;
 
     try {
@@ -221,13 +230,6 @@ function App() {
       console.error(error);
       setMessage("도서 추천 중 오류가 발생했습니다.");
     }
-  };
-
-  const showToast = (text) => {
-    setMessage("");
-    window.setTimeout(() => {
-      setMessage(text);
-    }, 0);
   };
 
   const moveToStart = () => {
