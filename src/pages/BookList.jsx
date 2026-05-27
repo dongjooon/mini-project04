@@ -36,9 +36,13 @@ function BookList({
             <h2>도서 목록</h2>
             <div className="list-actions">
               <div className="search-box">
-                <select className="search-type-select" value={type} onChange={(e) => {
-                  onType(e.target.value)
-                }}>
+                <select
+                  className="search-type-select"
+                  value={type}
+                  onChange={(e) => {
+                    onType(e.target.value);
+                  }}
+                >
                   <option value="all">전체</option>
                   <option value="title">제목</option>
                   <option value="author">작가</option>
@@ -47,16 +51,32 @@ function BookList({
                   <option value="tag">태그</option>
                 </select>
 
-
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => handleSearchChange(e.target.value)}
                   placeholder="도서를 검색해주세요"
                 />
-                <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24">
-                  <path d="m21 21-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2.5" />
-                  <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2.5" />
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                >
+                  <path
+                    d="m21 21-4.35-4.35"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  />
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="7"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  />
                 </svg>
               </div>
 

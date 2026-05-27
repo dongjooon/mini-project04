@@ -19,6 +19,7 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -505,6 +506,36 @@ img {
   gap: 14px;
 }
 
+.section-title {
+  margin-bottom: 10px;
+}
+
+.section-title h3 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #0f2e4f;
+}
+
+.section-title h3::before {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #edf5f4;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.popular-books-section .section-title h3::before {
+  content: "🔥";
+}
+
+.new-books-section .section-title h3::before {
+  content: "✨";
+}
+
 .book-card {
   display: grid;
   grid-template-columns: 92px minmax(0, 1fr);
@@ -539,9 +570,11 @@ img {
   justify-content: space-between;
   overflow: hidden;
   background:
-    radial-gradient(circle at 20% 0%,
+    radial-gradient(
+      circle at 20% 0%,
       rgba(255, 255, 255, 0.16),
-      transparent 36%),
+      transparent 36%
+    ),
     linear-gradient(160deg, #328270, #163f58);
   color: #ffffff;
 }
@@ -809,7 +842,6 @@ img {
   font-size: 14px;
 }
 
-
 .recommend-panel {
   display: inline-flex;
   align-items: center;
@@ -845,7 +877,7 @@ img {
 }
 
 .like-button {
-  width: 58px;
+  width: 70px;
   min-height: 62px;
   display: inline-flex;
   flex-direction: column;
@@ -899,20 +931,6 @@ img {
     opacity: 0;
     transform: translate(-50%, -58%);
   }
-}
-
-.like-button {
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  font-size: 24px;
-  outline: none;
-}
-
-.like-button:hover {
-  transform: scale(1.1);
-  transition: transform 0.2s ease-in-out;
 }
 
 .form-page {
@@ -1070,7 +1088,6 @@ img {
   border-radius: 16px;
   color: #6b7f91;
 }
-
 
 .cover-modal-backdrop {
   position: fixed;

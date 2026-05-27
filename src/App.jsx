@@ -13,7 +13,7 @@ function App() {
   const [books, setBooks] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [search, setSearch] = useState("");
-  const [type, setType] = useState("all"); // 검색 타입
+  const [type, setType] = useState("all");
   const [listPage, setListPage] = useState(1);
   const [message, setMessage] = useState("");
   const [aiRecommendation, setAiRecommendation] = useState(null);
@@ -29,7 +29,7 @@ function App() {
     if (!keyword) return books;
 
     if (keyword.startsWith("#")) {
-      const searchTag = keyword.replace(/^#/, "").trim(); // 검색어에서 맨 앞 '#' 제거 (예: "#소설" -> "소설")
+      const searchTag = keyword.replace(/^#/, "").trim();
 
       if (!searchTag) return books;
 
@@ -42,25 +42,19 @@ function App() {
     }
 
     return books.filter((book) => {
-      let filtered = {}
-      switch(type){
-        case 'title':
-          filtered = book.title.toLowerCase().includes(keyword);
-          break;
-        case 'author':
-          filtered = book.author.toLowerCase().includes(keyword);
-          break;
-        case 'publisher':
-          filtered = book.publisher.toLowerCase().includes(keyword);
-          break;
-        case 'content':
-          filtered = book.content.toLowerCase().includes(keyword);
-          break;
-        case 'tag':
-          filtered = book.tags?.toLowerCase().includes(keyword)
-          break;
+      switch (type) {
+        case "title":
+          return book.title.toLowerCase().includes(keyword);
+        case "author":
+          return book.author.toLowerCase().includes(keyword);
+        case "publisher":
+          return book.publisher.toLowerCase().includes(keyword);
+        case "content":
+          return book.content.toLowerCase().includes(keyword);
+        case "tag":
+          return book.tags?.toLowerCase().includes(keyword);
         default:
-          filtered = (
+          return (
             book.title.toLowerCase().includes(keyword) ||
             book.author.toLowerCase().includes(keyword) ||
             book.publisher.toLowerCase().includes(keyword) ||
@@ -68,7 +62,6 @@ function App() {
             book.tags?.toLowerCase().includes(keyword)
           );
       }
-      return filtered;
     });
   }, [books, search, type]);
 
@@ -181,7 +174,6 @@ function App() {
     return () => window.clearTimeout(timerId);
   }, [loadBooks]);
 
-
   useEffect(() => {
     if (!message) return undefined;
 
@@ -192,16 +184,12 @@ function App() {
     return () => window.clearTimeout(timerId);
   }, [message]);
 
-
-
   const showToast = (text) => {
     setMessage("");
     window.setTimeout(() => {
       setMessage(text);
     }, 0);
   };
-
-
 
   const moveToStart = () => {
     setMessage("");
@@ -266,7 +254,7 @@ function App() {
 
       const savedBook = await res.json();
 
-      setBooks((prevBooks) => [savedBook, ...prevBooks]);
+      setBooks((prevBooks) => [...prevBooks, savedBook]);
       setSelectedId(savedBook.id);
       setMessage("새 도서를 등록했습니다.");
       setPage("detail");
@@ -309,7 +297,7 @@ function App() {
     }
   };
 
-    const handleLikeBook = async (book) => {
+  const handleLikeBook = async (book) => {
     const currentLikes = book.likeCount || 0;
 
     try {
@@ -367,8 +355,7 @@ function App() {
   };
 
   const handleGenerateCover = async ({ book, apiKey, model, quality }) => {
-    const OPENAI_IMAGE_API_URL =
-      "https://api.openai.com/v1/images/generations";
+    const OPENAI_IMAGE_API_URL = "https://api.openai.com/v1/images/generations";
 
     const prompt = `
 
