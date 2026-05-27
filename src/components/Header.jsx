@@ -15,7 +15,7 @@ function Header({ onMoveToStart }) {
           </svg>
         </button>
         <button type="button" className="brand-title" onClick={onMoveToStart}>
-          걷기가 서재
+          AivleBooks
         </button>
       </div>
     </header>

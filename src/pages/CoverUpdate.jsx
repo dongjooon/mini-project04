@@ -8,9 +8,10 @@ function CoverUpdate({
   onMoveToStart,
   onMoveToDetail,
   onGenerateCover,
+  onSaveCoverImage,
 }) {
   const [apiKey, setApiKey] = useState("");
-  const [model, setModel] = useState("gpt-image-2");
+  const [model, setModel] = useState("gpt-Image-2.0");
   const [quality, setQuality] = useState("medium");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isCoverOpen, setIsCoverOpen] = useState(false);
@@ -53,6 +54,37 @@ function CoverUpdate({
     }
   };
 
+  const handleLocalImageChange = async (e) => {
+    const file = e.target.files?.[0];
+
+    e.target.value = "";
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("이미지 파일만 선택해주세요.");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      await onSaveCoverImage(book, reader.result);
+    };
+    reader.onerror = () => {
+      alert("이미지 파일을 읽지 못했습니다.");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDeleteCoverImage = async () => {
+    const isConfirm = window.confirm("생성된 표지를 삭제하고 기본 이미지로 되돌릴까요?");
+
+    if (!isConfirm) return;
+
+    await onSaveCoverImage(book, "");
+  };
+
   return (
     <>
       <Header
@@ -77,12 +109,14 @@ function CoverUpdate({
 
             <div className="form-group">
               <label>모델</label>
-              <input
-                type="text"
+              <select
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
                 disabled={isGenerating}
-              />
+              >
+                <option value="gpt-Image-2.0">gpt-Image-2.0</option>
+                <option value="gpt-Image-1.5">gpt-Image-1.5</option>
+              </select>
             </div>
 
             <div className="form-group">
@@ -117,6 +151,9 @@ function CoverUpdate({
             <CoverPreview
               imageUrl={previewImage}
               isLoading={isGenerating}
+              onDelete={handleDeleteCoverImage}
+              onUploadImage={handleLocalImageChange}
+              isUploadDisabled={isGenerating}
               onClick={() => {
                 if (previewImage) {
                   setIsCoverOpen(true);
