@@ -13,6 +13,7 @@ function App() {
   const [books, setBooks] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [search, setSearch] = useState("");
+  const [type, setType] = useState("all"); // 검색 타입
   const [listPage, setListPage] = useState(1);
   const [message, setMessage] = useState("");
   const [aiRecommendation, setAiRecommendation] = useState(null);
@@ -41,28 +42,35 @@ function App() {
     }
 
     return books.filter((book) => {
-      return (
-        book.title.toLowerCase().includes(keyword) ||
-        book.author.toLowerCase().includes(keyword) ||
-        book.publisher.toLowerCase().includes(keyword) ||
-        book.content.toLowerCase().includes(keyword) ||
-        book.tags?.toLowerCase().includes(keyword)
-      );
+      let filtered = {}
+      switch(type){
+        case 'title':
+          filtered = book.title.toLowerCase().includes(keyword);
+          break;
+        case 'author':
+          filtered = book.author.toLowerCase().includes(keyword);
+          break;
+        case 'publisher':
+          filtered = book.publisher.toLowerCase().includes(keyword);
+          break;
+        case 'content':
+          filtered = book.content.toLowerCase().includes(keyword);
+          break;
+        case 'tag':
+          filtered = book.tags?.toLowerCase().includes(keyword)
+          break;
+        default:
+          filtered = (
+            book.title.toLowerCase().includes(keyword) ||
+            book.author.toLowerCase().includes(keyword) ||
+            book.publisher.toLowerCase().includes(keyword) ||
+            book.content.toLowerCase().includes(keyword) ||
+            book.tags?.toLowerCase().includes(keyword)
+          );
+      }
+      return filtered;
     });
-  }, [books, search]);
-
-  const newBooks = useMemo(() => {
-    return [...books]
-      .sort((a, b) => {
-        const dateA = a.createdAt || "";
-        const dateB = b.createdAt || "";
-        if (dateA !== dateB) {
-          return dateB.localeCompare(dateA);
-        }
-        return b.id - a.id;
-      })
-      .slice(0, 3);
-  }, [books]);
+  }, [books, search, type]);
 
   const popularBooks = useMemo(() => {
     return [...books]
@@ -71,6 +79,19 @@ function App() {
         const likeB = b.likeCount || 0;
         if (likeA !== likeB) {
           return likeB - likeA;
+        }
+        return b.id - a.id;
+      })
+      .slice(0, 3);
+  }, [books]);
+
+  const newBooks = useMemo(() => {
+    return [...books]
+      .sort((a, b) => {
+        const dateA = a.createdAt || "";
+        const dateB = b.createdAt || "";
+        if (dateA !== dateB) {
+          return dateB.localeCompare(dateA);
         }
         return b.id - a.id;
       })
@@ -160,6 +181,7 @@ function App() {
     return () => window.clearTimeout(timerId);
   }, [loadBooks]);
 
+
   useEffect(() => {
     if (!message) return undefined;
 
@@ -170,12 +192,16 @@ function App() {
     return () => window.clearTimeout(timerId);
   }, [message]);
 
+
+
   const showToast = (text) => {
     setMessage("");
     window.setTimeout(() => {
       setMessage(text);
     }, 0);
   };
+
+
 
   const moveToStart = () => {
     setMessage("");
@@ -283,7 +309,7 @@ function App() {
     }
   };
 
-  const handleLikeBook = async (book) => {
+    const handleLikeBook = async (book) => {
     const currentLikes = book.likeCount || 0;
 
     try {
@@ -341,9 +367,11 @@ function App() {
   };
 
   const handleGenerateCover = async ({ book, apiKey, model, quality }) => {
-    const OPENAI_IMAGE_API_URL = "https://api.openai.com/v1/images/generations";
+    const OPENAI_IMAGE_API_URL =
+      "https://api.openai.com/v1/images/generations";
 
     const prompt = `
+
     다음 도서에 어울리는 책 표지 이미지를 생성해주세요.
 
     도서 제목: ${book.title}
@@ -511,6 +539,8 @@ function App() {
           books={filteredBooks}
           search={search}
           onSearch={setSearch}
+          type={type}
+          onType={setType}
           currentPage={listPage}
           onPageChange={setListPage}
           onMoveToDetail={moveToDetail}
