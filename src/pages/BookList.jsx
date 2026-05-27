@@ -66,6 +66,10 @@ function BookList({
                   onChange={(e) => handleSearchChange(e.target.value)}
                   placeholder="도서를 검색해주세요"
                 />
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24">
+                  <path d="m21 21-4.35-4.35" fill="none" stroke="currentColor" stroke-width="2.5" />
+                  <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2.5" />
+                </svg>
               </div>
 
               <button

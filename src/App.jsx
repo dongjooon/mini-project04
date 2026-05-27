@@ -69,20 +69,7 @@ function App() {
       }
       return filtered;
     });
-  }, [books, search]);
-
-  const newBooks = useMemo(() => {
-    return [...books]
-      .sort((a, b) => {
-        const dateA = a.createdAt || "";
-        const dateB = b.createdAt || "";
-        if (dateA !== dateB) {
-          return dateB.localeCompare(dateA);
-        }
-        return b.id - a.id;
-      })
-      .slice(0, 3);
-  }, [books]);
+  }, [books, search, type]);
 
   const popularBooks = useMemo(() => {
     return [...books]
@@ -104,19 +91,6 @@ function App() {
         const dateB = b.createdAt || "";
         if (dateA !== dateB) {
           return dateB.localeCompare(dateA);
-        }
-        return b.id - a.id;
-      })
-      .slice(0, 3);
-  }, [books]);
-
-  const popularBooks = useMemo(() => {
-    return [...books]
-      .sort((a, b) => {
-        const likeA = a.likeCount || 0;
-        const likeB = b.likeCount || 0;
-        if (likeA !== likeB) {
-          return likeB - likeA;
         }
         return b.id - a.id;
       })
