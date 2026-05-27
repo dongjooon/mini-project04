@@ -11,7 +11,7 @@ function CoverUpdate({
   onSaveCoverImage,
 }) {
   const [apiKey, setApiKey] = useState("");
-  const [model, setModel] = useState("gpt-Image-2.0");
+  const [model, setModel] = useState("gpt-image-2");
   const [quality, setQuality] = useState("medium");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isCoverOpen, setIsCoverOpen] = useState(false);
