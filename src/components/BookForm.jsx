@@ -41,11 +41,10 @@ function BookForm({
 
       // 부모의 onChange를 호출해 입력창 상태 업데이트
       onChange({
-        target: { name: "tags", value: extractedTags }
+        target: { name: "tags", value: extractedTags },
       });
       setShowApiKeyInput(false);
       alert("AI 태그가 성공적으로 추출되었습니다!");
-
     } catch (error) {
       console.error(error);
       alert("AI 태그 추출에 실패했습니다.");
@@ -148,7 +147,7 @@ function BookForm({
               color: "white",
               border: "none",
               padding: "8px",
-              borderRadius: "6px"
+              borderRadius: "6px",
             }}
           >
             ✨ AI 태그 자동 추출

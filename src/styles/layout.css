@@ -387,15 +387,80 @@ img {
   position: relative;
 }
 
-.search-box input {
-  width: min(360px, 100%);
-  min-height: 44px;
-  padding: 0 48px 0 15px;
-  border: 1px solid #d5e0eb;
-  border-radius: 9px;
-  outline: none;
+.search-box {
+  display: flex;
+  align-items: center;
   background: #ffffff;
+  border: 1px solid #d5e0eb;
+  border-radius: 12px;
+  overflow: hidden;
+  /* 모서리 깔끔하게 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  height: 48px;
+  /* 높이 통일 */
+  min-width: 420px;
+}
+
+.search-type-select {
+  height: 100%;
+  border: none;
+  background: #f8fafc;
+  padding: 0 16px 0 18px;
+  font-size: 0.95rem;
   color: #16324f;
+  border-right: 1px solid #e5e7eb;
+  cursor: pointer;
+  min-width: 110px;
+  outline: none;
+}
+
+.search-type-select:focus {
+  background: #edf5f4;
+}
+
+.search-box input {
+  flex: 1;
+  height: 100%;
+  border: none;
+  outline: none;
+  padding: 0 16px;
+  font-size: 1.02rem;
+  background: transparent;
+}
+
+.search-box svg {
+  width: 20px;
+  height: 20px;
+  margin-right: 16px;
+  color: #64748b;
+  /* fallback */
+  stroke: #64748b;
+  /* ← 이 줄 추가 */
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+/* 호버/포커스 효과 */
+.search-box:focus-within {
+  border-color: #2f7f6f;
+  box-shadow: 0 0 0 3px rgba(47, 127, 111, 0.15);
+}
+
+.create-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.create-button svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .search-box svg {
@@ -812,7 +877,7 @@ img {
 }
 
 .like-button {
-  width: 58px;
+  width: 70px;
   min-height: 62px;
   display: inline-flex;
   flex-direction: column;
@@ -1237,6 +1302,7 @@ img {
     opacity: 0.5;
     transform: translateY(3px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

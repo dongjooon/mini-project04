@@ -13,6 +13,7 @@ function App() {
   const [books, setBooks] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [search, setSearch] = useState("");
+  const [type, setType] = useState("all");
   const [listPage, setListPage] = useState(1);
   const [message, setMessage] = useState("");
   const [aiRecommendation, setAiRecommendation] = useState(null);
@@ -28,7 +29,7 @@ function App() {
     if (!keyword) return books;
 
     if (keyword.startsWith("#")) {
-      const searchTag = keyword.replace(/^#/, "").trim(); // 검색어에서 맨 앞 '#' 제거 (예: "#소설" -> "소설")
+      const searchTag = keyword.replace(/^#/, "").trim();
 
       if (!searchTag) return books;
 
@@ -41,28 +42,28 @@ function App() {
     }
 
     return books.filter((book) => {
-      return (
-        book.title.toLowerCase().includes(keyword) ||
-        book.author.toLowerCase().includes(keyword) ||
-        book.publisher.toLowerCase().includes(keyword) ||
-        book.content.toLowerCase().includes(keyword) ||
-        book.tags?.toLowerCase().includes(keyword)
-      );
+      switch (type) {
+        case "title":
+          return book.title.toLowerCase().includes(keyword);
+        case "author":
+          return book.author.toLowerCase().includes(keyword);
+        case "publisher":
+          return book.publisher.toLowerCase().includes(keyword);
+        case "content":
+          return book.content.toLowerCase().includes(keyword);
+        case "tag":
+          return book.tags?.toLowerCase().includes(keyword);
+        default:
+          return (
+            book.title.toLowerCase().includes(keyword) ||
+            book.author.toLowerCase().includes(keyword) ||
+            book.publisher.toLowerCase().includes(keyword) ||
+            book.content.toLowerCase().includes(keyword) ||
+            book.tags?.toLowerCase().includes(keyword)
+          );
+      }
     });
-  }, [books, search]);
-
-  const newBooks = useMemo(() => {
-    return [...books]
-      .sort((a, b) => {
-        const dateA = a.createdAt || "";
-        const dateB = b.createdAt || "";
-        if (dateA !== dateB) {
-          return dateB.localeCompare(dateA);
-        }
-        return b.id - a.id;
-      })
-      .slice(0, 3);
-  }, [books]);
+  }, [books, search, type]);
 
   const popularBooks = useMemo(() => {
     return [...books]
@@ -71,6 +72,19 @@ function App() {
         const likeB = b.likeCount || 0;
         if (likeA !== likeB) {
           return likeB - likeA;
+        }
+        return b.id - a.id;
+      })
+      .slice(0, 3);
+  }, [books]);
+
+  const newBooks = useMemo(() => {
+    return [...books]
+      .sort((a, b) => {
+        const dateA = a.createdAt || "";
+        const dateB = b.createdAt || "";
+        if (dateA !== dateB) {
+          return dateB.localeCompare(dateA);
         }
         return b.id - a.id;
       })
@@ -344,6 +358,7 @@ function App() {
     const OPENAI_IMAGE_API_URL = "https://api.openai.com/v1/images/generations";
 
     const prompt = `
+
     다음 도서에 어울리는 책 표지 이미지를 생성해주세요.
 
     도서 제목: ${book.title}
@@ -511,6 +526,8 @@ function App() {
           books={filteredBooks}
           search={search}
           onSearch={setSearch}
+          type={type}
+          onType={setType}
           currentPage={listPage}
           onPageChange={setListPage}
           onMoveToDetail={moveToDetail}
