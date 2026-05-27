@@ -19,6 +19,7 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -438,6 +439,36 @@ img {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 14px;
+}
+
+.section-title {
+  margin-bottom: 10px;
+}
+
+.section-title h3 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #0f2e4f;
+}
+
+.section-title h3::before {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #edf5f4;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.popular-books-section .section-title h3::before {
+  content: "🔥";
+}
+
+.new-books-section .section-title h3::before {
+  content: "✨";
 }
 
 .book-card {
